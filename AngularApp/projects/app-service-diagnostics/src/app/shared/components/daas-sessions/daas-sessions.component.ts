@@ -146,6 +146,10 @@ export class DaasSessionsComponent implements OnChanges, OnDestroy {
             sessions.push(this.getSessionMasterFromV2(session));
           });
         }
+        // Temporary check to avoid 404s coming from /daas/sessions path
+        else if (typeof results[1] === 'string' && results[1].toLowerCase().indexOf("no route registered") > -1) {
+          this.subscription.unsubscribe();
+        }
 
         if (this.isArrayWithItems(sessionsV1)) {
           sessionsV1.forEach(session => {
