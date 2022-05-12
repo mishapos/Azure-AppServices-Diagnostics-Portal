@@ -1,10 +1,8 @@
 ﻿using AppLensV3.Models;
-using Microsoft.Azure.Documents;
-using Microsoft.Azure.Documents.Client;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace AppLensV3.Services
@@ -18,25 +16,76 @@ namespace AppLensV3.Services
             Inital(configration).Wait();
         }
 
-        public async Task<UserSetting> UpdateUserSettings(UserSetting userSetting)
+        public Task<UserSetting> UpdateUserSetting(UserSetting userSetting)
         {
-            return await UpdateUserInfoInternal(userSetting);
+            return UpdateItemAsync(userSetting, UserSettingConstant.PartitionKey);
         }
 
-        private async Task<UserSetting> UpdateUserInfoInternal(UserSetting user)
+        public async Task<UserSetting> AddRecentResources(string id, List<RecentResource> recentResources)
         {
-            if (string.IsNullOrEmpty(DatabaseId))
+            var patchOperations = new[]
             {
-                return null;
-            }
-            Document doc;
-            doc = await client.UpsertDocumentAsync(UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId), user, new RequestOptions { PartitionKey = new PartitionKey(UserSettingConstant.PartitionKey) });
-            return (dynamic)doc;
+                PatchOperation.Add("/resources",recentResources)
+            };
+            return await Container.PatchItemAsync<UserSetting>(id, new PartitionKey(UserSettingConstant.PartitionKey), patchOperations);
         }
 
-        public async Task<UserSetting> GetItemAsync(string id)
+        public async Task<UserSetting> RemoveFavoriteDetector(string id, string detectorId)
         {
-            return await GetItemAsync(id, UserSettingConstant.PartitionKey);
+            try
+            {
+                var patchOperations = new[]
+            {
+                PatchOperation.Remove($"/favoriteDetectors/{detectorId}")
+            };
+                return await Container.PatchItemAsync<UserSetting>(id, new PartitionKey(UserSettingConstant.PartitionKey), patchOperations);
+            }
+            catch (CosmosException e)
+            {
+                Console.WriteLine(e.ToString());
+                return await GetUserSetting(id);
+            }
+
+            //var patchOperations = new[]
+            //{
+            //    PatchOperation.Remove($"/favoriteDetectors/${detectorId}")
+            //};
+            //return await Container.PatchItemAsync<UserSetting>(id, new PartitionKey(UserSettingConstant.PartitionKey), patchOperations);
+
         }
+
+        public async Task<UserSetting> AddFavoriteDetector(string id, string detectorId, FavoriteDetectorProp detectorProp)
+        {
+            var patchOperations = new[]
+            {
+                PatchOperation.Add($"/favoriteDetectors/{detectorId}", detectorProp)
+            };
+            //If number of faviorite detectors over a given threshold, then patch faild and throw exception to UI
+            var pathcItemRequiredOption = new PatchItemRequestOptions()
+            {
+                FilterPredicate = "FROM X WHERE "
+            };
+            return await Container.PatchItemAsync<UserSetting>(id, new PartitionKey(UserSettingConstant.PartitionKey), patchOperations);
+        }
+
+        public Task<UserSetting> PathUserSettingProperty(string id,string property,object value)
+        {
+            return PathItemAsync(id, UserSettingConstant.PartitionKey, property, value);
+        }
+
+
+
+        public async Task<UserSetting> GetUserSetting(string id)
+        {
+            UserSetting userSetting = null;
+            userSetting = await GetItemAsync(id, UserSettingConstant.PartitionKey);
+            if (userSetting == null)
+            {
+                var newUserSetting = new UserSetting(id);
+                userSetting = await CreateItemAsync(newUserSetting);
+            }
+            return userSetting;
+        }
+
     }
 }
