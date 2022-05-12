@@ -63,13 +63,7 @@ export class UserSettingService {
     }
 
     public updateUserSetting(item: any, fn: UpdateUserSettingCallBack) {
-        this.getUserSetting().pipe(catchError(error => {
-            if (error.status === 404) {
-                const userSetting = new UserSetting(this.userId);
-                return of(userSetting);
-            }
-            throw error;
-        })).subscribe(userSetting => {
+        this.getUserSetting().subscribe(userSetting => {
             const updatedUserSetting = fn(item, userSetting);
 
             this._diagnosticApiService.updateUserSetting(updatedUserSetting).subscribe(setting => {
