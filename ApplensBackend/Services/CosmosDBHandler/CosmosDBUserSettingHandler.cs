@@ -21,56 +21,69 @@ namespace AppLensV3.Services
             return UpdateItemAsync(userSetting, UserSettingConstant.PartitionKey);
         }
 
-        public async Task<UserSetting> AddRecentResources(string id, List<RecentResource> recentResources)
+        public async Task<UserSetting> PatchLandingInfo(string id, List<RecentResource> resources, string defaultServiceType)
         {
             var patchOperations = new[]
-            {
-                PatchOperation.Add("/resources",recentResources)
+              {
+                PatchOperation.Add("/resources",resources),
+                PatchOperation.Add("/defaultServiceType",defaultServiceType)
             };
             return await Container.PatchItemAsync<UserSetting>(id, new PartitionKey(UserSettingConstant.PartitionKey), patchOperations);
         }
 
         public async Task<UserSetting> RemoveFavoriteDetector(string id, string detectorId)
         {
-            try
-            {
-                var patchOperations = new[]
-            {
+            var patchOperations = new[]
+             {
                 PatchOperation.Remove($"/favoriteDetectors/{detectorId}")
-            };
-                return await Container.PatchItemAsync<UserSetting>(id, new PartitionKey(UserSettingConstant.PartitionKey), patchOperations);
-            }
-            catch (CosmosException e)
-            {
-                Console.WriteLine(e.ToString());
-                return await GetUserSetting(id);
-            }
-
-            //var patchOperations = new[]
-            //{
-            //    PatchOperation.Remove($"/favoriteDetectors/${detectorId}")
-            //};
-            //return await Container.PatchItemAsync<UserSetting>(id, new PartitionKey(UserSettingConstant.PartitionKey), patchOperations);
-
+             };
+            return await Container.PatchItemAsync<UserSetting>(id, new PartitionKey(UserSettingConstant.PartitionKey), patchOperations);
         }
 
         public async Task<UserSetting> AddFavoriteDetector(string id, string detectorId, FavoriteDetectorProp detectorProp)
         {
-            var patchOperations = new[]
+            try
             {
+                var patchOperations = new[]
+                {
                 PatchOperation.Add($"/favoriteDetectors/{detectorId}", detectorProp)
-            };
-            //If number of faviorite detectors over a given threshold, then patch faild and throw exception to UI
-            var pathcItemRequiredOption = new PatchItemRequestOptions()
+                };
+
+                return await Container.PatchItemAsync<UserSetting>(id, new PartitionKey(UserSettingConstant.PartitionKey), patchOperations);
+            }
+            catch (CosmosException e)
             {
-                FilterPredicate = "FROM X WHERE "
-            };
-            return await Container.PatchItemAsync<UserSetting>(id, new PartitionKey(UserSettingConstant.PartitionKey), patchOperations);
+                if (e.Message.Contains("Operation can only create a child object of an existing node"))
+                {
+                    var patchOperations = new[]
+                    {
+                        PatchOperation.Add("/favoriteDetectors",new Dictionary<string,FavoriteDetectorProp>()),
+                        PatchOperation.Add($"/favoriteDetectors/{detectorId}", detectorProp)
+                    };
+
+                    return await Container.PatchItemAsync<UserSetting>(id, new PartitionKey(UserSettingConstant.PartitionKey), patchOperations);
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
 
-        public Task<UserSetting> PathUserSettingProperty(string id,string property,object value)
+        public Task<UserSetting> PathUserSettingProperty(string id, string property, object value)
         {
             return PathItemAsync(id, UserSettingConstant.PartitionKey, property, value);
+        }
+
+        public async Task<UserSetting> PatchUserPanelSetting(string id, string theme, string viewMode, string expandAnalysisCheckCard)
+        {
+            var patchOperations = new[]
+            {
+                PatchOperation.Add("/theme",theme),
+                PatchOperation.Add("/viewMode",viewMode),
+                PatchOperation.Add("/expandAnalysisCheckCard",expandAnalysisCheckCard)
+            };
+            return await Container.PatchItemAsync<UserSetting>(id, new PartitionKey(UserSettingConstant.PartitionKey), patchOperations);
         }
 
 

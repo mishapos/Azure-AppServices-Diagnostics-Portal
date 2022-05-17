@@ -16,5 +16,9 @@ namespace AppLensV3.Services
         Task<UserSetting> RemoveFavoriteDetector(string id,string detectorId);
 
         Task<UserSetting> AddFavoriteDetector(string id, string detectorId, FavoriteDetectorProp prop);
+
+        Task<UserSetting> PatchUserPanelSetting(string id, string theme, string viewMode, string expandAnalysisCheckCard);
+
+        Task<UserSetting> PatchLandingInfo(string id, List<RecentResource> resources, string defaultServiceType);
     }
 }

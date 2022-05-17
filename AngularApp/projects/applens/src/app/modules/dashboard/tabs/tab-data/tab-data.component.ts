@@ -1,10 +1,12 @@
-import { DetectorMetaData, DetectorResponse } from 'diagnostic-data';
+import { DetectorMetaData, DetectorResponse, DetectorType, HealthStatus } from 'diagnostic-data';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { ApplensDiagnosticService } from '../../services/applens-diagnostic.service';
 import { DetectorControlService } from 'diagnostic-data';
 import { ApplensCommandBarService } from '../../services/applens-command-bar.service';
 import { ApplensGlobal } from 'projects/applens/src/app/applens-global';
+import { UserSettingService } from '../../services/user-setting.service';
+import { IPanelProps, PanelType } from 'office-ui-fabric-react';
 
 @Component({
   selector: 'tab-data',
@@ -13,21 +15,44 @@ import { ApplensGlobal } from 'projects/applens/src/app/applens-global';
 })
 export class TabDataComponent implements OnInit {
 
-  constructor(private _route: ActivatedRoute, private _diagnosticApiService: ApplensDiagnosticService, private _detectorControlService: DetectorControlService,private _applensCommandBarService:ApplensCommandBarService,private _applensGlobal:ApplensGlobal) { }
+  constructor(private _route: ActivatedRoute, private _diagnosticApiService: ApplensDiagnosticService, private _detectorControlService: DetectorControlService, private _applensCommandBarService: ApplensCommandBarService, private _applensGlobal: ApplensGlobal, private _userSettingService: UserSettingService) { }
 
   detectorResponse: DetectorResponse;
 
   detector: string;
-
-  error: any;
 
   analysisMode: boolean = false;
 
   hideDetectorControl: boolean = false;
 
   internalExternalText: string = "";
-  internalViewText: string = "Internal view";
-  externalViewText: string = "Customer view";
+  readonly internalViewText: string = "Internal view";
+  readonly externalViewText: string = "Customer view";
+
+  pinnedDetector: boolean = false;
+  get pinUnpinDetectorText() {
+    return this.pinnedDetector ? "UnPin" : "Pin"
+  }
+
+  get pinUnpinDetectorIcon() {
+    return this.pinnedDetector ? "Unpin" : "Pinned"
+  }
+  panelStyles: IPanelProps['styles'] = {
+    root: {
+      height: "60px",
+    },
+    content: {
+      padding: "0px"
+    }
+  }
+  PanelType = PanelType;
+  panelHealthStatus = HealthStatus.Success;
+  panelTimer = null;
+  showPanel: boolean = false;
+  panelMessage: string = "";
+  panelErrorMessage: string = "";
+
+
 
   ngOnInit() {
 
@@ -45,10 +70,10 @@ export class TabDataComponent implements OnInit {
       this.analysisMode = this._route.snapshot.data['analysisMode'];
     });
 
-    if (this._detectorControlService.isInternalView){
+    if (this._detectorControlService.isInternalView) {
       this.internalExternalText = this.internalViewText;
     }
-    else{
+    else {
       this.internalExternalText = this.externalViewText;
     }
   }
@@ -56,10 +81,18 @@ export class TabDataComponent implements OnInit {
   refresh() {
     this.detector = this._route.snapshot.params['detector'];
     this._diagnosticApiService.getDetectorMetaDataById(this.detector).subscribe(metaData => {
-      if(metaData) {
+      if (metaData) {
         this._applensGlobal.updateHeader(metaData.name);
       }
-    })
+    });
+
+    this._userSettingService.getUserSetting().subscribe(userSetting => {
+      if (userSetting && userSetting.favoriteDetectors) {
+        const favoriteDetectorIds = Object.keys(userSetting.favoriteDetectors);
+        this.pinnedDetector = favoriteDetectorIds.findIndex(d => d.toLowerCase() === this.detector.toLowerCase() && userSetting.favoriteDetectors[this.detector].type === DetectorType.Detector) > -1;
+
+      }
+    });
   }
 
   refreshPage() {
@@ -67,7 +100,7 @@ export class TabDataComponent implements OnInit {
   }
 
   emailToAuthor() {
-    this._applensCommandBarService.getDetectorMeatData(this.detector).subscribe(metaData =>{
+    this._applensCommandBarService.getDetectorMeatData(this.detector).subscribe(metaData => {
       this._applensCommandBarService.emailToAuthor(metaData);
     });
   }
@@ -76,15 +109,44 @@ export class TabDataComponent implements OnInit {
     this._applensGlobal.openFeedback = true;
   }
 
-  internalExternalToggle(){
-    if (this.internalExternalText === this.externalViewText){
+  internalExternalToggle() {
+    if (this.internalExternalText === this.externalViewText) {
       this.internalExternalText = this.internalViewText;
     }
-    else{
+    else {
       this.internalExternalText = this.externalViewText;
     }
 
     this._detectorControlService.toggleInternalExternal();
     this.refreshPage();
+  }
+
+  addOrRemoveDetector() {
+    this.panelErrorMessage = "";
+    this.panelHealthStatus = HealthStatus.Success;
+
+    const request = this.pinnedDetector ? this._userSettingService.removeFavoriteDetector(this.detector) : this._userSettingService.addFavoriteDetector(this.detector, { type: DetectorType.Detector });
+    request.subscribe(_ => {
+      this.panelMessage = `Detector has been ${this.pinnedDetector ? 'pinned' : 'unpinned'}`;
+      this.autoDismissPanel();
+    }, err => {
+      this.autoDismissPanel();
+      this.panelHealthStatus = HealthStatus.Critical;
+      if (err === this._userSettingService.overMaxFavoriteDetectorError) {
+        this.panelErrorMessage = err;
+      } else {
+        this.panelErrorMessage = "Some issue happened while updating pinned detector, Please try a again later";
+      }
+    });
+  }
+
+  private autoDismissPanel() {
+    this.showPanel = true;
+    if (this.panelTimer !== null) {
+      clearTimeout(this.panelTimer);
+    }
+    this.panelTimer = setTimeout(() => {
+      this.showPanel = false;
+    }, 3000);
   }
 }

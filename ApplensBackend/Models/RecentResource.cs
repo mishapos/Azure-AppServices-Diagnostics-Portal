@@ -54,12 +54,6 @@ namespace AppLensV3.Models
     {
         public string ResourceUri { get; set; }
         public string Kind { get; set; }
-
-        public DateTime StartTime { get; set; }
-
-        public DateTime EndTime { get; set; }
-
-        //public Dictionary<string,string> queryParams
     }
 
     public class FavoriteDetectorProp

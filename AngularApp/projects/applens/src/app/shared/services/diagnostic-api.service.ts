@@ -420,12 +420,7 @@ export class DiagnosticApiService {
   }
 
   public getUserSetting(userId: string): Observable<UserSetting> {
-    let url: string = `${this.diagnosticApi}api/usersetting/${userId}`;
-    let request = this._httpClient.get<UserSetting>(url, {
-      headers: this._getHeaders()
-    });
-    return request;
-    // return this.get(`api/recent/${userId}`);
+    return this.get(`api/usersetting/${userId}`);
   }
   
   public updateUserSetting(userSettings: UserSetting):Observable<UserSetting> {
