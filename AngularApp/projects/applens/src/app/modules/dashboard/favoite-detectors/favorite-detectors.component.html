@@ -1,0 +1,29 @@
+<collapsible-list-fabric [collapsed]="false" [title]="'Pinned Detectors'">
+    <collapsible-list-item body>
+        <div *ngIf="favoriteDetectorsForDisplay.length>0;else noFavoriteDetector" style="display: flex;">
+            <div *ngFor="let detector of favoriteDetectorsForDisplay" style="width: 300px;min-height: 100px;margin: 0px 5px;">
+                <fab-card [isExpandable]="false" [expanded]="true">
+                    <div header style="display: flex;justify-content: space-between;min-height: 40px;">
+                        <div>{{detector.name}}</div>
+                        <div tabindex="0" (keyup.enter)="removeDetector(detector.id)">
+                            <fab-icon  iconName="Unpin" ariaLabel="Pin Favorite Detector" (onClick)="removeDetector(detector.id)" [styles]="unPinnedIconStyles"></fab-icon>
+                        </div>
+                    </div>
+                    <div body style="height: 40px;">
+                        <div>{{detector.description}}</div>
+                    </div>
+                    <div footer>
+                        <div>
+                            <fab-link [href]="''" (onClick)="navigate(detector)">Go To {{detector.type}}</fab-link>
+                        </div>
+                    </div>
+                </fab-card>
+            </div>
+        </div>
+    </collapsible-list-item>
+</collapsible-list-fabric>
+<fab-panel></fab-panel>
+
+<ng-template #noFavoriteDetector>
+    <div>Pin your favorite and frequent detectors or analysis here to get quick access to troubleshoot.</div>
+</ng-template>

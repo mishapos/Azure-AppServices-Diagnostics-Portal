@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DetectorControlService,DetectorMetaData } from 'diagnostic-data';
+import { DetectorControlService, DetectorMetaData } from 'diagnostic-data';
 import { ApplensDiagnosticService } from './applens-diagnostic.service';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class ApplensCommandBarService {
     }
 
     public emailToAuthor(data: DetectorMetaData): void {
-        if(!data) return;
+        if (!data) return;
 
         const subject = encodeURIComponent(`Detector Feedback for ${data.id}`);
         const body = encodeURIComponent('Current site: ' + window.location.href + '\n' + 'Please provide feedback here:');
