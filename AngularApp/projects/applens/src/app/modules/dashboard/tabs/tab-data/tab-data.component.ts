@@ -135,7 +135,7 @@ export class TabDataComponent implements OnInit {
       if (err === this._userSettingService.overMaxFavoriteDetectorError) {
         this.panelErrorMessage = err;
       } else {
-        this.panelErrorMessage = "Some issue happened while updating pinned detector, Please try a again later";
+        this.panelErrorMessage = "Some issue happened while updating pinned detector, Please try again later";
       }
     });
   }

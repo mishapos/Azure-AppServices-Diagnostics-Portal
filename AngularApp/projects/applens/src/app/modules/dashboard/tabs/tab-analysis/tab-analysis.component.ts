@@ -1,11 +1,12 @@
 import { Component, OnInit, OnChanges, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApplensDiagnosticService } from '../../services/applens-diagnostic.service';
-import { DetectorListAnalysisComponent, DetectorType } from 'diagnostic-data';
+import { DetectorListAnalysisComponent, DetectorType, HealthStatus } from 'diagnostic-data';
 import { DownTime, zoomBehaviors } from 'diagnostic-data';
 import { ApplensCommandBarService } from '../../services/applens-command-bar.service';
 import { ApplensGlobal } from 'projects/applens/src/app/applens-global';
 import { UserSettingService } from '../../services/user-setting.service';
+import { IPanelProps, PanelType } from 'office-ui-fabric-react';
 
 @Component({
   selector: 'tab-analysis',
@@ -28,6 +29,22 @@ export class TabAnalysisComponent implements OnInit {
   get pinUnpinDetectorIcon() {
     return this.pinnedDetector ? "Unpin" : "Pinned"
   }
+
+  panelStyles: IPanelProps['styles'] = {
+    root: {
+      height: "60px",
+    },
+    content: {
+      padding: "0px"
+    }
+  };
+
+  PanelType = PanelType;
+  panelHealthStatus = HealthStatus.Success;
+  panelTimer = null;
+  showPanel: boolean = false;
+  panelMessage: string = "";
+  panelErrorMessage: string = "";
 
   @ViewChild('detectorListAnalysis', { static: true }) detectorListAnalysis: DetectorListAnalysisComponent
   downtimeZoomBehavior = zoomBehaviors.Zoom;
@@ -85,7 +102,31 @@ export class TabAnalysisComponent implements OnInit {
   }
 
   addOrRemoveDetector() {
+    this.panelErrorMessage = "";
+    this.panelHealthStatus = HealthStatus.Success;
+
     const request = this.pinnedDetector ? this._userSettingService.removeFavoriteDetector(this.analysisId) : this._userSettingService.addFavoriteDetector(this.analysisId, { type: DetectorType.Analysis });
-    request.subscribe();
+    request.subscribe(_ => {
+      this.panelMessage = `Analysis has been ${this.pinnedDetector ? 'pinned' : 'unpinned'}`;
+      this.autoDismissPanel();
+    }, err => {
+      this.autoDismissPanel();
+      this.panelHealthStatus = HealthStatus.Critical;
+      if (err === this._userSettingService.overMaxFavoriteDetectorError) {
+        this.panelErrorMessage = err;
+      } else {
+        this.panelErrorMessage = "Some issue happened while updating pinned analysis, Please try again later";
+      }
+    });
+  }
+
+  private autoDismissPanel() {
+    this.showPanel = true;
+    if (this.panelTimer !== null) {
+      clearTimeout(this.panelTimer);
+    }
+    this.panelTimer = setTimeout(() => {
+      this.showPanel = false;
+    }, 3000);
   }
 }
