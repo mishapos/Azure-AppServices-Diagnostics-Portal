@@ -72,7 +72,7 @@ import { FavoriteDetectorsComponent } from './favoite-detectors/favorite-detecto
 
 @Injectable()
 export class InitResolver implements Resolve<Observable<ResourceInfo>>{
-    constructor(private _resourceService: ResourceService, private _detectorControlService: DetectorControlService,private _userSettingService:UserSettingService) { }
+    constructor(private _resourceService: ResourceService, private _detectorControlService: DetectorControlService, private _userSettingService: UserSettingService) { }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ResourceInfo> {
         const startTime = route.queryParams['startTime'];
@@ -84,19 +84,19 @@ export class InitResolver implements Resolve<Observable<ResourceInfo>>{
             startDate: new Date(startTime),
             endDate: new Date(endTime)
         });
-        
+
         //Wait for getting UserSetting and update landingPage info before going to dashboard/detector page
-        let recentResource:RecentResource = null;
+        let recentResource: RecentResource = null;
         return this._resourceService.waitForInitialization().pipe(map(resourceInfo => {
             recentResource = {
                 resourceUri: resourceInfo.resourceUri,
                 kind: resourceInfo.kind
             };
             return resourceInfo;
-        }),flatMap(resourceInfo => {
+        }), flatMap(resourceInfo => {
             return this._userSettingService.getUserSetting(true).pipe(map(_ => resourceInfo));
-        }),flatMap(resourceInfo => {
-            return this._userSettingService.updateLandingInfo(recentResource).pipe(catchError(_ => null) ,map(_ => resourceInfo));
+        }), flatMap(resourceInfo => {
+            return this._userSettingService.updateLandingInfo(recentResource).pipe(catchError(_ => of(null)), map(_ => resourceInfo));
         }));
     }
 }
