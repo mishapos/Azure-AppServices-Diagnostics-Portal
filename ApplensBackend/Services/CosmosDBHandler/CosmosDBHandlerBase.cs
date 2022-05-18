@@ -29,12 +29,12 @@ namespace AppLensV3.Services
 
         protected async Task Inital(IConfiguration configuration)
         {
-            if (configuration["ServerMode"].Equals("internal", StringComparison.OrdinalIgnoreCase)
-                && (string.IsNullOrWhiteSpace(Endpoint) || string.IsNullOrWhiteSpace(Key)))
-            {
-                // For internal server mode, if the cosmos db settings are not present, then skip the initialization part.
-                return;
-            }
+            //if (configuration["ServerMode"].Equals("internal", StringComparison.OrdinalIgnoreCase)
+            //    && (string.IsNullOrWhiteSpace(Endpoint) || string.IsNullOrWhiteSpace(Key)))
+            //{
+            //    // For internal server mode, if the cosmos db settings are not present, then skip the initialization part.
+            //    return;
+            //}
             Client = new CosmosClient(Endpoint, Key);
             await CreateDatabaseIfNotExistsAsync();
             await CreateCollectionIfNotExistsAsync();
@@ -111,6 +111,8 @@ namespace AppLensV3.Services
            {
                 PatchOperation.Add($"/{property}",value)
             };
+
+            //var patchItemRequestOperations = new PatchItemRequestOptions()
 
             return await Container.PatchItemAsync<T>(id, new PartitionKey(partitionKey), patchOperations);
         }
