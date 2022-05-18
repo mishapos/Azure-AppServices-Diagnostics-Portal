@@ -2,7 +2,6 @@
 using AppLensV3.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Cosmos;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -56,14 +55,8 @@ namespace AppLensV3.Controllers
             var resources = body?["resources"]?.ToObject<List<RecentResource>>();
             var defaultServiceType = body?["defaultServiceType"]?.ToString();
 
-            try
-            {
-                var userSetting = await _cosmosDBHandler.PatchLandingInfo(userId, resources, defaultServiceType);
-                return Ok(userSetting);
-            }catch(CosmosException e)
-            {
-                return BadRequest(e.Message.ToString());
-            }
+            var userSetting = await _cosmosDBHandler.PatchLandingInfo(userId, resources, defaultServiceType);
+            return Ok(userSetting);
         }
 
         [HttpPost("{userId}/userPanelSetting")]
