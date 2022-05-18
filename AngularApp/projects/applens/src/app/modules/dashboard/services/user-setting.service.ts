@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { AdalService } from "adal-angular4";
-import { flatMap, map } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { BehaviorSubject, Observable, of, throwError } from "rxjs";
 import { FavoriteDetectorProp, FavoriteDetectors, LandingInfo, RecentResource, UserPanelSetting, UserSetting, } from "../../../shared/models/user-setting";
 import { DiagnosticApiService } from "../../../shared/services/diagnostic-api.service";
@@ -38,7 +38,7 @@ export class UserSettingService {
             return this._userSettingSubject;
         }
 
-        return this._diagnosticApiService.get<UserSetting>(`api/usersetting/${this._userId}`, invalidateCache).pipe(
+        return this._diagnosticApiService.getUserSetting(this._userId, invalidateCache).pipe(
             map(userSetting => {
                 this._userSetting = userSetting;
                 return userSetting;
@@ -81,41 +81,40 @@ export class UserSettingService {
         return res;
     }
 
-    updateUserPanelSetting(panelSettings: UserPanelSetting): Observable<UserSetting> {
-        const url: string = `${this._diagnosticApiService.diagnosticApi}api/usersetting/${this._userId}/userPanelSetting`;
-        return this._httpClient.post<UserSetting>(url, panelSettings).map(userSetting => this._userSetting = userSetting);
+    updateUserPanelSetting(panelSetting: UserPanelSetting): Observable<UserSetting> {
+        return this._diagnosticApiService.updateUserPanelSetting(panelSetting, this._userId).pipe(map(userSetting => {
+            this._userSetting = userSetting;
+            return userSetting;
+        }))
     }
 
     updateLandingInfo(resource: RecentResource): Observable<UserSetting> {
-        const url: string = `${this._diagnosticApiService.diagnosticApi}api/usersetting/${this._userId}/landingInfo`;
         const updatedResources = this.addRecentResource(resource, this._userSetting);
         const info: LandingInfo = {
             resources: updatedResources,
             defaultServiceType: this._userSetting.defaultServiceType
         };
-        return this._httpClient.post<UserSetting>(url, info).map(userSetting => {
+        return this._diagnosticApiService.updateUserLandingInfo(info, this._userId).pipe(map(userSetting => {
             this._userSetting = userSetting;
             return userSetting;
-        });
+        }));
     }
 
     removeFavoriteDetector(detectorId: string): Observable<FavoriteDetectors> {
         const url = `${this._diagnosticApiService.diagnosticApi}api/usersetting/${this._userId}/favoriteDetectors/${detectorId}`;
-
-        return this._httpClient.delete<UserSetting>(url).map(userSetting => {
+        return this._diagnosticApiService.removeFavoriteDetector(detectorId, this._userId).pipe(map(userSetting => {
             this._userSetting = userSetting;
-            return userSetting.favoriteDetectors;
-        });
+            return userSetting.favoriteDetectors
+        }));
     }
 
     addFavoriteDetector(detectorId: string, detectorProp: FavoriteDetectorProp): Observable<FavoriteDetectors> {
         if (Object.keys(this._userSetting.favoriteDetectors).length >= this.maxFavoriteDetectors) {
             return throwError(this.overMaxFavoriteDetectorError);
         }
-        const url = `${this._diagnosticApiService.diagnosticApi}api/usersetting/${this._userId}/favoriteDetectors/${detectorId}`;
-        return this._httpClient.post<UserSetting>(url, detectorProp).map(userSetting => {
+        return this._diagnosticApiService.addFavoriteDetector(detectorId,detectorProp,this._userId).pipe(map(userSetting => {
             this._userSetting = userSetting;
-            return userSetting.favoriteDetectors;
-        });
+            return userSetting.favoriteDetectors
+        }))
     }
 }
