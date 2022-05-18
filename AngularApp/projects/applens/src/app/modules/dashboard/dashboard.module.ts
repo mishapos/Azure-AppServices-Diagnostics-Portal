@@ -94,7 +94,7 @@ export class InitResolver implements Resolve<Observable<ResourceInfo>>{
             };
             return resourceInfo;
         }), flatMap(resourceInfo => {
-            return this._userSettingService.getUserSetting(true).pipe(map(_ => resourceInfo));
+            return this._userSettingService.getUserSetting(true).pipe(catchError(_ => of(null)), map(_ => resourceInfo));
         }), flatMap(resourceInfo => {
             return this._userSettingService.updateLandingInfo(recentResource).pipe(catchError(_ => of(null)), map(_ => resourceInfo));
         }));

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { AdalService } from "adal-angular4";
 import { map } from "rxjs/operators";
-import { BehaviorSubject, Observable, of, throwError } from "rxjs";
+import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { FavoriteDetectorProp, FavoriteDetectors, LandingInfo, RecentResource, UserPanelSetting, UserSetting, } from "../../../shared/models/user-setting";
 import { DiagnosticApiService } from "../../../shared/services/diagnostic-api.service";
 import { HttpClient } from "@angular/common/http";
@@ -101,7 +101,6 @@ export class UserSettingService {
     }
 
     removeFavoriteDetector(detectorId: string): Observable<FavoriteDetectors> {
-        const url = `${this._diagnosticApiService.diagnosticApi}api/usersetting/${this._userId}/favoriteDetectors/${detectorId}`;
         return this._diagnosticApiService.removeFavoriteDetector(detectorId, this._userId).pipe(map(userSetting => {
             this._userSetting = userSetting;
             return userSetting.favoriteDetectors
