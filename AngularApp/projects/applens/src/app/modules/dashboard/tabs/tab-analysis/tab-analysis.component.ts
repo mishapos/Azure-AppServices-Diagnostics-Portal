@@ -5,7 +5,6 @@ import { DetectorListAnalysisComponent, DetectorType, HealthStatus } from 'diagn
 import { DownTime, zoomBehaviors } from 'diagnostic-data';
 import { ApplensCommandBarService } from '../../services/applens-command-bar.service';
 import { ApplensGlobal } from 'projects/applens/src/app/applens-global';
-import { UserSettingService } from '../../services/user-setting.service';
 import { IPanelProps, PanelType } from 'office-ui-fabric-react';
 
 @Component({
@@ -44,18 +43,17 @@ export class TabAnalysisComponent implements OnInit {
   panelTimer = null;
   showPanel: boolean = false;
   panelMessage: string = "";
-  panelErrorMessage: string = "";
 
   @ViewChild('detectorListAnalysis', { static: true }) detectorListAnalysis: DetectorListAnalysisComponent
   downtimeZoomBehavior = zoomBehaviors.Zoom;
 
-  constructor(private _activatedRoute: ActivatedRoute, private _router: Router, private _diagnosticService: ApplensDiagnosticService,private _applensCommandBarService:ApplensCommandBarService,private _applensGlobal:ApplensGlobal,private _userSettingService: UserSettingService) {
+  constructor(private _activatedRoute: ActivatedRoute, private _router: Router, private _diagnosticService: ApplensDiagnosticService, private _applensCommandBarService: ApplensCommandBarService, private _applensGlobal: ApplensGlobal) {
     this._activatedRoute.paramMap.subscribe(params => {
       this.analysisId = params.get('analysisId');
       this._diagnosticService.getDetectorMetaDataById(this.analysisId).subscribe(metaData => {
-        if(metaData) this._applensGlobal.updateHeader(metaData.name);
+        if (metaData) this._applensGlobal.updateHeader(metaData.name);
       });
-      this._userSettingService.getUserSetting().subscribe(userSetting => {
+      this._applensCommandBarService.getUserSetting().subscribe(userSetting => {
         if (userSetting && userSetting.favoriteDetectors) {
           const favoriteDetectorIds = Object.keys(userSetting.favoriteDetectors);
           this.pinnedDetector = favoriteDetectorIds.findIndex(d => d.toLowerCase() === this.analysisId.toLowerCase()) > -1;
@@ -92,7 +90,7 @@ export class TabAnalysisComponent implements OnInit {
   }
 
   emailToAuthor() {
-    this._applensCommandBarService.getDetectorMeatData(this.analysisId).subscribe(metaData =>{
+    this._applensCommandBarService.getDetectorMeatData(this.analysisId).subscribe(metaData => {
       this._applensCommandBarService.emailToAuthor(metaData);
     });
   }
@@ -102,22 +100,38 @@ export class TabAnalysisComponent implements OnInit {
   }
 
   addOrRemoveDetector() {
-    this.panelErrorMessage = "";
+    this.showPanel = false;
+    this.panelMessage = "";
     this.panelHealthStatus = HealthStatus.Success;
 
-    const request = this.pinnedDetector ? this._userSettingService.removeFavoriteDetector(this.analysisId) : this._userSettingService.addFavoriteDetector(this.analysisId, { type: DetectorType.Analysis });
-    request.subscribe(_ => {
-      this.panelMessage = `Analysis has been ${this.pinnedDetector ? 'pinned' : 'unpinned'}`;
-      this.autoDismissPanel();
+    if(this.pinnedDetector) {
+      this.removeFavoriteDetector();
+    }else {
+      this.addFavoriteDetector();
+    }
+  }
+
+  private addFavoriteDetector() {
+    this._applensCommandBarService.addFavoriteDetector(this.analysisId,DetectorType.Analysis).subscribe(message => {
+      this.setPanelStatusAndMessage(HealthStatus.Success, message);
+    }, error => {
+      this.setPanelStatusAndMessage(HealthStatus.Critical, error);
+    })
+  }
+
+
+  private removeFavoriteDetector() {
+    this._applensCommandBarService.removeFavoriteDetector(this.analysisId).subscribe(message => {
+      this.setPanelStatusAndMessage(HealthStatus.Success, message);
     }, err => {
-      this.autoDismissPanel();
-      this.panelHealthStatus = HealthStatus.Critical;
-      if (err === this._userSettingService.overMaxFavoriteDetectorError) {
-        this.panelErrorMessage = err;
-      } else {
-        this.panelErrorMessage = "Some issue happened while updating pinned analysis, Please try again later";
-      }
-    });
+      this.setPanelStatusAndMessage(HealthStatus.Critical, err);
+    })
+  }
+
+  private setPanelStatusAndMessage(status: HealthStatus, message: string) {
+    this.panelHealthStatus = status;
+    this.panelMessage = message;
+    this.autoDismissPanel();
   }
 
   private autoDismissPanel() {

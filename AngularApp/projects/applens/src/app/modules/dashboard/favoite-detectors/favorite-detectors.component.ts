@@ -40,7 +40,6 @@ export class FavoriteDetectorsComponent implements OnInit {
   panelTimer = null;
   showPanel: boolean = false;
   panelMessage: string = "";
-  panelErrorMessage: string = "";
 
 
   ngOnInit() {
@@ -62,16 +61,17 @@ export class FavoriteDetectorsComponent implements OnInit {
   }
 
   public removeDetector(detector: DetectorMetaData) {
-    this.panelErrorMessage = "";
+    this.panelMessage = "";
     this.panelHealthStatus = HealthStatus.Success;
 
     this._userSettingService.removeFavoriteDetector(detector.id).subscribe(_ => {
       this.autoDismissPanel();
-      this.panelMessage = `${detector.type} has been removed`;
+      this.panelHealthStatus = HealthStatus.Success;
+      this.panelMessage = `Successfully unpinned to overview page`;
     }, err => {
       this.autoDismissPanel();
       this.panelHealthStatus = HealthStatus.Critical;
-      this.panelErrorMessage = `Some issue happened while unpinning ${detector.type.toLowerCase()}, Please try again later`;
+      this.panelMessage = `Some issue happened while unpinning, Please try again later`;
     });
   }
 

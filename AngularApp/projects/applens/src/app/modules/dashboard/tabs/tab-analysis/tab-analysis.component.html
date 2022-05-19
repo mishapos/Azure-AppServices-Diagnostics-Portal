@@ -21,8 +21,7 @@
   <div style="padding: 10px;">
     <div style="display: flex;align-items: center; font-size: 14px;">
       <status-icon [status]="panelHealthStatus" class="mr-3"></status-icon>
-      <strong *ngIf="panelErrorMessage === ''">{{panelMessage}}</strong>
-      <strong *ngIf="panelErrorMessage !== ''">{{panelErrorMessage}}</strong>
+      <strong>{{panelMessage}}</strong>
     </div>
   </div>
 </fab-panel>

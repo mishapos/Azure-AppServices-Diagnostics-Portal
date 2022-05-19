@@ -61,7 +61,7 @@ import { L2SideNavComponent } from './l2-side-nav/l2-side-nav.component';
 import { ApplensCommandBarService } from './services/applens-command-bar.service';
 import { ApplensGlobal as ApplensGlobals } from '../../applens-global';
 import { ResourceInfo } from '../../shared/models/resources';
-import { catchError, flatMap, map } from 'rxjs/operators';
+import { catchError, flatMap, map, take } from 'rxjs/operators';
 import { RecentResource } from '../../shared/models/user-setting';
 import { UserSettingService } from './services/user-setting.service';
 import { ApplensDocsComponent } from '../../shared/components/applens-docs/applens-docs.component';
@@ -94,7 +94,7 @@ export class InitResolver implements Resolve<Observable<ResourceInfo>>{
             };
             return resourceInfo;
         }), flatMap(resourceInfo => {
-            return this._userSettingService.getUserSetting(true).pipe(catchError(_ => of(null)), map(_ => resourceInfo));
+            return this._userSettingService.getUserSetting().pipe(take(1),catchError(_ => of(null)), map(_ => resourceInfo));
         }), flatMap(resourceInfo => {
             return this._userSettingService.updateLandingInfo(recentResource).pipe(catchError(_ => of(null)), map(_ => resourceInfo));
         }));

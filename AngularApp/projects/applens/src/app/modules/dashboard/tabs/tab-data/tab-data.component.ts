@@ -15,7 +15,7 @@ import { IPanelProps, PanelType } from 'office-ui-fabric-react';
 })
 export class TabDataComponent implements OnInit {
 
-  constructor(private _route: ActivatedRoute, private _diagnosticApiService: ApplensDiagnosticService, private _detectorControlService: DetectorControlService, private _applensCommandBarService: ApplensCommandBarService, private _applensGlobal: ApplensGlobal, private _userSettingService: UserSettingService) { }
+  constructor(private _route: ActivatedRoute, private _diagnosticApiService: ApplensDiagnosticService, private _detectorControlService: DetectorControlService, private _applensCommandBarService: ApplensCommandBarService, private _applensGlobal: ApplensGlobal) { }
 
   detectorResponse: DetectorResponse;
 
@@ -51,7 +51,6 @@ export class TabDataComponent implements OnInit {
   panelTimer = null;
   showPanel: boolean = false;
   panelMessage: string = "";
-  panelErrorMessage: string = "";
 
 
 
@@ -88,7 +87,7 @@ export class TabDataComponent implements OnInit {
       }
     });
 
-    this._userSettingService.getUserSetting().subscribe(userSetting => {
+    this._applensCommandBarService.getUserSetting().subscribe(userSetting => {
       if (userSetting && userSetting.favoriteDetectors) {
         const favoriteDetectorIds = Object.keys(userSetting.favoriteDetectors);
         this.pinnedDetector = favoriteDetectorIds.findIndex(d => d.toLowerCase() === this.detector.toLowerCase()) > -1;
@@ -123,25 +122,42 @@ export class TabDataComponent implements OnInit {
   }
 
   addOrRemoveDetector() {
-    this.panelErrorMessage = "";
+    this.showPanel = false;
+    this.panelMessage = "";
     this.panelHealthStatus = HealthStatus.Success;
+    
+    if(this.pinnedDetector) {
+      this.removeFavoriteDetector();
+    }else {
+      this.addFavoriteDetector();
+    }
+  }
+    
+
+  private addFavoriteDetector() {
     //Pinned detector can be analysis
     const detectorType = this.detectorMetaData ? this.detectorMetaData.type : DetectorType.Detector;
-    const request = this.pinnedDetector ? this._userSettingService.removeFavoriteDetector(this.detector) : this._userSettingService.addFavoriteDetector(this.detector, { type: detectorType });
-    
-    
-    request.subscribe(_ => {
-      this.panelMessage = `Detector has been ${this.pinnedDetector ? 'pinned' : 'unpinned'}`;
-      this.autoDismissPanel();
+
+    this._applensCommandBarService.addFavoriteDetector(this.detector,detectorType).subscribe(message => {
+      this.setPanelStatusAndMessage(HealthStatus.Success, message);
+    }, error => {
+      this.setPanelStatusAndMessage(HealthStatus.Critical, error);
+    })
+  }
+
+
+  private removeFavoriteDetector() {
+    this._applensCommandBarService.removeFavoriteDetector(this.detector).subscribe(message => {
+      this.setPanelStatusAndMessage(HealthStatus.Success, message);
     }, err => {
-      this.autoDismissPanel();
-      this.panelHealthStatus = HealthStatus.Critical;
-      if (err === this._userSettingService.overMaxFavoriteDetectorError) {
-        this.panelErrorMessage = err;
-      } else {
-        this.panelErrorMessage = "Some issue happened while updating pinned detector, Please try again later";
-      }
-    });
+      this.setPanelStatusAndMessage(HealthStatus.Critical, err);
+    })
+  }
+
+  private setPanelStatusAndMessage(status: HealthStatus, message: string) {
+    this.panelHealthStatus = status;
+    this.panelMessage = message;
+    this.autoDismissPanel();
   }
 
   private autoDismissPanel() {

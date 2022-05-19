@@ -4,7 +4,6 @@ import { map } from "rxjs/operators";
 import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { FavoriteDetectorProp, FavoriteDetectors, LandingInfo, RecentResource, UserPanelSetting, UserSetting, } from "../../../shared/models/user-setting";
 import { DiagnosticApiService } from "../../../shared/services/diagnostic-api.service";
-import { HttpClient } from "@angular/common/http";
 import { TelemetryEventNames, TelemetryService } from "diagnostic-data";
 
 @Injectable()
@@ -29,8 +28,8 @@ export class UserSettingService {
     }
 
     private readonly maxRecentResources = 5;
-    private readonly maxFavoriteDetectors = 5;
-    readonly overMaxFavoriteDetectorError = `Over ${this.maxFavoriteDetectors} of Pinned detectors, Please remove some your pinned favorite detector`;
+    public readonly maxFavoriteDetectors = 5;
+    //public readonly overMaxFavoriteDetectorError = `Over ${this.maxFavoriteDetectors} of Pinned detectors, Please remove some pinned detectors in Overview`;
 
     constructor(private _diagnosticApiService: DiagnosticApiService, private _adalService: AdalService, private _telemetryService:TelemetryService) { 
     }
@@ -110,9 +109,7 @@ export class UserSettingService {
     }
 
     addFavoriteDetector(detectorId: string, detectorProp: FavoriteDetectorProp): Observable<FavoriteDetectors> {
-        if (Object.keys(this._userSetting.favoriteDetectors).length >= this.maxFavoriteDetectors) {
-            return throwError(this.overMaxFavoriteDetectorError);
-        }
+        console.log("Add Favorite Detector", detectorId);
         this._telemetryService.logEvent(TelemetryEventNames.FavoriteDetectorAdded,{'detectorId': detectorId});
         return this._diagnosticApiService.addFavoriteDetector(detectorId,detectorProp,this._userId).pipe(map(userSetting => {
             this._userSetting = userSetting;
