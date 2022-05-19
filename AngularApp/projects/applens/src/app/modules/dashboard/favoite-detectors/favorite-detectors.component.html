@@ -4,7 +4,7 @@
             <div *ngFor="let detector of favoriteDetectorsForDisplay" class="favorite-card" >
                 <fab-card [isExpandable]="false" [expanded]="true" tabindex="0" (click)="navigate(detector)" (keyup.enter)="navigate(detector)">
                     <div header class="favorite-card-header">
-                        <div>{{detector.category}}</div>
+                        <div>{{detector.category | uppercase}}</div>
                         <div tabindex="0" (keyup.enter)="removeDetector(detector)" (click)="removeDetector($event,detector)">
                             <fab-icon  iconName="Unpin" ariaLabel="Pin Favorite Detector" [styles]="unPinnedIconStyles"></fab-icon>
                         </div>

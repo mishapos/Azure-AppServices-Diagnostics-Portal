@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DetectorMetaData, DetectorType, HealthStatus, TelemetryEventNames, TelemetryService } from 'diagnostic-data';
-import { IIconProps, ILinkProps, IPanelProps, PanelType } from 'office-ui-fabric-react';
+import { IIconProps, IPanelProps, PanelType } from 'office-ui-fabric-react';
 import { FavoriteDetectors } from '../../../shared/models/user-setting';
 import { ApplensDiagnosticService } from '../services/applens-diagnostic.service';
 import { UserSettingService } from '../services/user-setting.service';
