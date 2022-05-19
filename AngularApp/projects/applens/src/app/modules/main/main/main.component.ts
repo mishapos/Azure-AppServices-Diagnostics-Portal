@@ -295,7 +295,6 @@ export class MainComponent implements OnInit {
       this.showResourceTypeOptions = false;
     }
     this.selectedResourceType = type;
-    this._userSettingService.updateDefaultServiceType(type.id);
   }
 
   selectDropdownKey(e: { option: IDropdownOption, index: number }) {
@@ -342,6 +341,7 @@ export class MainComponent implements OnInit {
   }
 
   onSubmit() {
+    this._userSettingService.updateDefaultServiceType(this.selectedResourceType.id);
     if (this.caseNumberNeededForUser && (this.selectedResourceType && this.selectedResourceType.userAuthorizationEnabled)) {
       this.caseNumber = this.caseNumber.trim();
       if (!this.validateCaseNumber()){

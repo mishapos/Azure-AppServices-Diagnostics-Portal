@@ -58,7 +58,7 @@ export class TabAnalysisComponent implements OnInit {
       this._userSettingService.getUserSetting().subscribe(userSetting => {
         if (userSetting && userSetting.favoriteDetectors) {
           const favoriteDetectorIds = Object.keys(userSetting.favoriteDetectors);
-          this.pinnedDetector = favoriteDetectorIds.findIndex(d => d.toLowerCase() === this.analysisId.toLowerCase() && userSetting.favoriteDetectors[this.analysisId].type === DetectorType.Analysis) > -1;
+          this.pinnedDetector = favoriteDetectorIds.findIndex(d => d.toLowerCase() === this.analysisId.toLowerCase()) > -1;
         }
       });
     });

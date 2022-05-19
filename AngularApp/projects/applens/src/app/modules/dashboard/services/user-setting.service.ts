@@ -14,6 +14,7 @@ export class UserSettingService {
     currentThemeSub: BehaviorSubject<string> = new BehaviorSubject<string>("light");
     currentViewModeSub: BehaviorSubject<string> = new BehaviorSubject<string>("smarter");
     isWaterfallViewSub: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    public defaultServiceType: string = "";
     private set _userSetting(userSetting: UserSetting) {
         this._userSettingSubject.next(userSetting);
     }
@@ -63,9 +64,8 @@ export class UserSettingService {
     }
 
     updateDefaultServiceType(serviceType: string) {
-        if (this._userSetting) {
-            this._userSetting.defaultServiceType = serviceType;
-        }
+        //One thing can do in future is to update default service type in different module
+        this.defaultServiceType = serviceType;
     }
 
     private addRecentResource(newResource: RecentResource, userSetting: UserSetting): RecentResource[] {
@@ -92,7 +92,7 @@ export class UserSettingService {
         const updatedResources = this.addRecentResource(resource, this._userSetting);
         const info: LandingInfo = {
             resources: updatedResources,
-            defaultServiceType: this._userSetting.defaultServiceType
+            defaultServiceType: this.defaultServiceType ? this.defaultServiceType : this._userSetting.defaultServiceType
         };
         return this._diagnosticApiService.updateUserLandingInfo(info, this._userId).pipe(map(userSetting => {
             this._userSetting = userSetting;

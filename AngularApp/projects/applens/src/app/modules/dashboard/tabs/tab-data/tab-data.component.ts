@@ -20,6 +20,7 @@ export class TabDataComponent implements OnInit {
   detectorResponse: DetectorResponse;
 
   detector: string;
+  detectorMetaData: DetectorMetaData;
 
   analysisMode: boolean = false;
 
@@ -83,14 +84,14 @@ export class TabDataComponent implements OnInit {
     this._diagnosticApiService.getDetectorMetaDataById(this.detector).subscribe(metaData => {
       if (metaData) {
         this._applensGlobal.updateHeader(metaData.name);
+        this.detectorMetaData = metaData;
       }
     });
 
     this._userSettingService.getUserSetting().subscribe(userSetting => {
       if (userSetting && userSetting.favoriteDetectors) {
         const favoriteDetectorIds = Object.keys(userSetting.favoriteDetectors);
-        this.pinnedDetector = favoriteDetectorIds.findIndex(d => d.toLowerCase() === this.detector.toLowerCase() && userSetting.favoriteDetectors[this.detector].type === DetectorType.Detector) > -1;
-
+        this.pinnedDetector = favoriteDetectorIds.findIndex(d => d.toLowerCase() === this.detector.toLowerCase()) > -1;
       }
     });
   }
@@ -124,8 +125,11 @@ export class TabDataComponent implements OnInit {
   addOrRemoveDetector() {
     this.panelErrorMessage = "";
     this.panelHealthStatus = HealthStatus.Success;
-
-    const request = this.pinnedDetector ? this._userSettingService.removeFavoriteDetector(this.detector) : this._userSettingService.addFavoriteDetector(this.detector, { type: DetectorType.Detector });
+    //Pinned detector can be analysis
+    const detectorType = this.detectorMetaData ? this.detectorMetaData.type : DetectorType.Detector;
+    const request = this.pinnedDetector ? this._userSettingService.removeFavoriteDetector(this.detector) : this._userSettingService.addFavoriteDetector(this.detector, { type: detectorType });
+    
+    
     request.subscribe(_ => {
       this.panelMessage = `Detector has been ${this.pinnedDetector ? 'pinned' : 'unpinned'}`;
       this.autoDismissPanel();
