@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { FavoriteDetectorProp, FavoriteDetectors, LandingInfo, RecentResource, UserPanelSetting, UserSetting, } from "../../../shared/models/user-setting";
 import { DiagnosticApiService } from "../../../shared/services/diagnostic-api.service";
 import { HttpClient } from "@angular/common/http";
+import { TelemetryEventNames, TelemetryService } from "diagnostic-data";
 
 @Injectable()
 export class UserSettingService {
@@ -31,7 +32,7 @@ export class UserSettingService {
     private readonly maxFavoriteDetectors = 5;
     readonly overMaxFavoriteDetectorError = `Over ${this.maxFavoriteDetectors} of Pinned detectors, Please remove some your pinned favorite detector`;
 
-    constructor(private _diagnosticApiService: DiagnosticApiService, private _adalService: AdalService, private _httpClient: HttpClient) { 
+    constructor(private _diagnosticApiService: DiagnosticApiService, private _adalService: AdalService, private _telemetryService:TelemetryService) { 
     }
 
     getUserSetting(invalidateCache = false): Observable<UserSetting> {
@@ -101,6 +102,7 @@ export class UserSettingService {
     }
 
     removeFavoriteDetector(detectorId: string): Observable<FavoriteDetectors> {
+        this._telemetryService.logEvent(TelemetryEventNames.FavoriteDetectorRemoved,{'detectorId': detectorId});
         return this._diagnosticApiService.removeFavoriteDetector(detectorId, this._userId).pipe(map(userSetting => {
             this._userSetting = userSetting;
             return userSetting.favoriteDetectors
@@ -111,6 +113,7 @@ export class UserSettingService {
         if (Object.keys(this._userSetting.favoriteDetectors).length >= this.maxFavoriteDetectors) {
             return throwError(this.overMaxFavoriteDetectorError);
         }
+        this._telemetryService.logEvent(TelemetryEventNames.FavoriteDetectorAdded,{'detectorId': detectorId});
         return this._diagnosticApiService.addFavoriteDetector(detectorId,detectorProp,this._userId).pipe(map(userSetting => {
             this._userSetting = userSetting;
             return userSetting.favoriteDetectors
