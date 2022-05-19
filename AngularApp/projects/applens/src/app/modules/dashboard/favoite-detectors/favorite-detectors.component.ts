@@ -60,7 +60,8 @@ export class FavoriteDetectorsComponent implements OnInit {
     }
   }
 
-  public removeDetector(detector: DetectorMetaData) {
+  public removeDetector(e:Event,detector: DetectorMetaData) {
+    e.stopPropagation();
     this.panelMessage = "";
     this.panelHealthStatus = HealthStatus.Success;
 
