@@ -88,12 +88,16 @@ export class FavoriteDetectorsComponent implements OnInit {
   }
 
   private sortFavoriteDetectorsForDisplay(detectors: DetectorMetaData[]): void {
-    const typeOrderForDisplay = [DetectorType.Analysis, DetectorType.Detector];
     detectors.sort((a, b) => {
-      const aTypeIndex = typeOrderForDisplay.findIndex(t => t === a.type);
-      const bTypeIndex = typeOrderForDisplay.findIndex(t => t === b.type);
-      if (aTypeIndex === bTypeIndex) return a.name > b.name ? 1 : -1;
-      else return aTypeIndex > bTypeIndex ? 1 : -1;
+
+     if(!a.category || !b.category) {
+       if(!a.category && !b.category) return a.name > b.name ? 1 : -1;
+       else return !a.category ? 1 : -1;
+     }else if(a.category === b.category) {
+       return a.name > b.name ? 1 : -1;
+     } else {
+       return a.category > b.category ? 1 : -1;
+     }
     });
   }
 
