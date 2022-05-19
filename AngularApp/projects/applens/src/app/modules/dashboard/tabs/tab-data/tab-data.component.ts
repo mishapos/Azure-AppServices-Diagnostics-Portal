@@ -1,11 +1,10 @@
-import { DetectorMetaData, DetectorResponse, DetectorType, HealthStatus } from 'diagnostic-data';
+import { DetectorMetaData, DetectorResponse, DetectorType, HealthStatus, TelemetryEventNames, TelemetryService } from 'diagnostic-data';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { ApplensDiagnosticService } from '../../services/applens-diagnostic.service';
 import { DetectorControlService } from 'diagnostic-data';
 import { ApplensCommandBarService } from '../../services/applens-command-bar.service';
 import { ApplensGlobal } from 'projects/applens/src/app/applens-global';
-import { UserSettingService } from '../../services/user-setting.service';
 import { IPanelProps, PanelType } from 'office-ui-fabric-react';
 
 @Component({
@@ -15,7 +14,7 @@ import { IPanelProps, PanelType } from 'office-ui-fabric-react';
 })
 export class TabDataComponent implements OnInit {
 
-  constructor(private _route: ActivatedRoute, private _diagnosticApiService: ApplensDiagnosticService, private _detectorControlService: DetectorControlService, private _applensCommandBarService: ApplensCommandBarService, private _applensGlobal: ApplensGlobal) { }
+  constructor(private _route: ActivatedRoute, private _diagnosticApiService: ApplensDiagnosticService, private _detectorControlService: DetectorControlService, private _applensCommandBarService: ApplensCommandBarService, private _applensGlobal: ApplensGlobal,private _telemetryService:TelemetryService) { }
 
   detectorResponse: DetectorResponse;
 
@@ -127,8 +126,10 @@ export class TabDataComponent implements OnInit {
     this.panelHealthStatus = HealthStatus.Success;
     
     if(this.pinnedDetector) {
+      this._telemetryService.logEvent(TelemetryEventNames.FavoriteDetectorRemoved,{'detectorId': this.detector});
       this.removeFavoriteDetector();
     }else {
+      this._telemetryService.logEvent(TelemetryEventNames.FavoriteDetectorAdded,{'detectorId': this.detector});
       this.addFavoriteDetector();
     }
   }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DetectorMetaData, DetectorType, HealthStatus } from 'diagnostic-data';
+import { DetectorMetaData, DetectorType, HealthStatus, TelemetryEventNames, TelemetryService } from 'diagnostic-data';
 import { IIconProps, ILinkProps, IPanelProps, PanelType } from 'office-ui-fabric-react';
 import { FavoriteDetectors } from '../../../shared/models/user-setting';
 import { ApplensDiagnosticService } from '../services/applens-diagnostic.service';
@@ -13,7 +13,7 @@ import { UserSettingService } from '../services/user-setting.service';
 })
 export class FavoriteDetectorsComponent implements OnInit {
 
-  constructor(private _userSettingService: UserSettingService, private _applensDiagnosticService: ApplensDiagnosticService, private _router: Router, private _activatedRoute: ActivatedRoute) { }
+  constructor(private _userSettingService: UserSettingService, private _applensDiagnosticService: ApplensDiagnosticService, private _router: Router, private _activatedRoute: ActivatedRoute, private _telemetryService: TelemetryService) { }
   HealthStatus = HealthStatus;
   allDetectors: DetectorMetaData[] = [];
   favoriteDetectorsForDisplay: DetectorMetaData[] = [];
@@ -60,10 +60,12 @@ export class FavoriteDetectorsComponent implements OnInit {
     }
   }
 
-  public removeDetector(e:Event,detector: DetectorMetaData) {
+  public removeDetector(e: Event, detector: DetectorMetaData) {
     e.stopPropagation();
     this.panelMessage = "";
     this.panelHealthStatus = HealthStatus.Success;
+
+    this._telemetryService.logEvent(TelemetryEventNames.FavoriteDetectorRemoved, { 'detectorId': detector.id });
 
     this._userSettingService.removeFavoriteDetector(detector.id).subscribe(_ => {
       this.autoDismissPanel();

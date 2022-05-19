@@ -1,7 +1,7 @@
 import { Component, OnInit, OnChanges, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApplensDiagnosticService } from '../../services/applens-diagnostic.service';
-import { DetectorListAnalysisComponent, DetectorType, HealthStatus } from 'diagnostic-data';
+import { DetectorListAnalysisComponent, DetectorType, HealthStatus, TelemetryEventNames, TelemetryService } from 'diagnostic-data';
 import { DownTime, zoomBehaviors } from 'diagnostic-data';
 import { ApplensCommandBarService } from '../../services/applens-command-bar.service';
 import { ApplensGlobal } from 'projects/applens/src/app/applens-global';
@@ -47,7 +47,7 @@ export class TabAnalysisComponent implements OnInit {
   @ViewChild('detectorListAnalysis', { static: true }) detectorListAnalysis: DetectorListAnalysisComponent
   downtimeZoomBehavior = zoomBehaviors.Zoom;
 
-  constructor(private _activatedRoute: ActivatedRoute, private _router: Router, private _diagnosticService: ApplensDiagnosticService, private _applensCommandBarService: ApplensCommandBarService, private _applensGlobal: ApplensGlobal) {
+  constructor(private _activatedRoute: ActivatedRoute, private _router: Router, private _diagnosticService: ApplensDiagnosticService, private _applensCommandBarService: ApplensCommandBarService, private _applensGlobal: ApplensGlobal, private _telemetryService: TelemetryService) {
     this._activatedRoute.paramMap.subscribe(params => {
       this.analysisId = params.get('analysisId');
       this._diagnosticService.getDetectorMetaDataById(this.analysisId).subscribe(metaData => {
@@ -104,15 +104,17 @@ export class TabAnalysisComponent implements OnInit {
     this.panelMessage = "";
     this.panelHealthStatus = HealthStatus.Success;
 
-    if(this.pinnedDetector) {
+    if (this.pinnedDetector) {
+      this._telemetryService.logEvent(TelemetryEventNames.FavoriteDetectorRemoved, { 'detectorId': this.analysisId });
       this.removeFavoriteDetector();
-    }else {
+    } else {
+      this._telemetryService.logEvent(TelemetryEventNames.FavoriteDetectorAdded, { 'detectorId': this.analysisId });
       this.addFavoriteDetector();
     }
   }
 
   private addFavoriteDetector() {
-    this._applensCommandBarService.addFavoriteDetector(this.analysisId,DetectorType.Analysis).subscribe(message => {
+    this._applensCommandBarService.addFavoriteDetector(this.analysisId, DetectorType.Analysis).subscribe(message => {
       this.setPanelStatusAndMessage(HealthStatus.Success, message);
     }, error => {
       this.setPanelStatusAndMessage(HealthStatus.Critical, error);
