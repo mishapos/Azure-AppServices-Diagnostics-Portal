@@ -83,27 +83,24 @@ export class FavoriteDetectorsComponent implements OnInit {
     const detectors = this.allDetectors.filter(detector => {
       return favoriteDetectorIds.indexOf(detector.id) > -1 && favoriteDetectors[detector.id].type === detector.type;
     });
+
+    detectors.forEach(d => {
+      if (!d.category) d.category = "Uncategorized";
+    });
     this.sortFavoriteDetectorsForDisplay(detectors);
     return detectors;
   }
 
   private sortFavoriteDetectorsForDisplay(detectors: DetectorMetaData[]): void {
     detectors.sort((a, b) => {
-
-     if(!a.category || !b.category) {
-       if(!a.category && !b.category) return a.name > b.name ? 1 : -1;
-       else return !a.category ? 1 : -1;
-     }else if(a.category === b.category) {
-       return a.name > b.name ? 1 : -1;
-     } else {
-       return a.category > b.category ? 1 : -1;
-     }
+      if(a.category === b.category) return a.name > b.name ? 1 : -1;
+      else return a.category > b.category ? 1 : -1;
     });
   }
 
   private autoDismissPanel() {
-    this.showPanel = true;
-    if (this.panelTimer !== null) {
+      this.showPanel = true;
+      if(this.panelTimer !== null) {
       clearTimeout(this.panelTimer);
     }
     this.panelTimer = setTimeout(() => {
