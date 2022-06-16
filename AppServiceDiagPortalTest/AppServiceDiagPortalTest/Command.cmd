@@ -1,0 +1,4 @@
+SETLOCAL
+SET Region='hk1'
+SET Slot='prod'
+DOTNET TEST
