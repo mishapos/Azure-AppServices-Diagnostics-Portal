@@ -28,17 +28,17 @@ export class FabricFeedbackComponent implements AfterViewInit, OnInit, OnDestroy
       {
         id: "Sad",
         text: "dissatisfied",
-        ariaLabel: "Dissatisfied Radio button 1 of 3"
+        ariaLabel: "Are you satisfied with your experience? Dissatisfied Radio button 1 of 3"
       },
       {
         id: "EmojiNeutral",
         text: "ok",
-        ariaLabel: "Ok Radio button 2 of 3"
+        ariaLabel: "Are you satisfied with your experience? Ok Radio button 2 of 3"
       },
       {
         id: "Emoji2",
         text: "satisfied",
-        ariaLabel: "Satisfied Radio button 1 of 3"
+        ariaLabel: "Are you satisfied with your experience? Satisfied Radio button 3 of 3"
       }
     ];
   submitted: boolean = false;
