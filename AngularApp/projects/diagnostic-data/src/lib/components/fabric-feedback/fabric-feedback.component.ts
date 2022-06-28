@@ -23,19 +23,22 @@ export class FabricFeedbackComponent implements AfterViewInit, OnInit, OnDestroy
   feedbackPanelConfig: { defaultFeedbackText?: string, notResetOnDismissed?: boolean, detectorName?: string, url?: string } = {};
   feedbackText: string = "";
   panelWidth: string = "315px";
-  feedbackIcons: { id: string, text: string }[] =
+  feedbackIcons: { id: string, text: string, ariaLabel: string }[] =
     [
       {
         id: "Sad",
-        text: "dissatisfied"
+        text: "dissatisfied",
+        ariaLabel: "Dissatisfied Radio button 1 of 3"
       },
       {
         id: "EmojiNeutral",
-        text: "ok"
+        text: "ok",
+        ariaLabel: "Ok Radio button 2 of 3"
       },
       {
         id: "Emoji2",
-        text: "satisfied"
+        text: "satisfied",
+        ariaLabel: "Satisfied Radio button 1 of 3"
       }
     ];
   submitted: boolean = false;
