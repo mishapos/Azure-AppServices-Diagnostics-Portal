@@ -5,7 +5,7 @@ import { Router, ActivatedRoute, NavigationExtras, NavigationEnd, Params } from 
 import { ResourceService } from '../../../shared/services/resource.service';
 import { CollapsibleMenuItem } from '../../../collapsible-menu/components/collapsible-menu-item/collapsible-menu-item.component';
 import { ApplensDiagnosticService } from '../services/applens-diagnostic.service';
-import { DetectorType, StringUtilities } from 'diagnostic-data';
+import { DetectorMetaData, DetectorType, StringUtilities } from 'diagnostic-data';
 import { TelemetryService } from '../../../../../../diagnostic-data/src/lib/services/telemetry/telemetry.service';
 import { TelemetryEventNames } from '../../../../../../diagnostic-data/src/lib/services/telemetry/telemetry.common';
 import { environment } from '../../../../environments/environment';
@@ -26,7 +26,6 @@ export class SideNavComponent implements OnInit {
 
   categories: CollapsibleMenuItem[] = [];
   categoriesCopy: CollapsibleMenuItem[] = [];
-  analysisTypes: CollapsibleMenuItem[] = [];
 
   gists: CollapsibleMenuItem[] = [];
   gistsCopy: CollapsibleMenuItem[] = [];
@@ -198,46 +197,15 @@ export class SideNavComponent implements OnInit {
     this._diagnosticApiService.getDetectors().subscribe(detectorList => {
       if (detectorList) {
         detectorList.forEach(element => {
-          let onClick = () => {
-            this._telemetryService.logEvent(TelemetryEventNames.SideNavigationItemClicked, { "elementId": element.id });
-            this.navigateTo(`detectors/${element.id}`);
-          };
-
-          let isSelected = () => {
-            return this.currentRoutePath && this.currentRoutePath.join('/') === `detectors/${element.id}`;
-          };
-
-          let category = element.category ? element.category : "Uncategorized";
-          let menuItem = new CollapsibleMenuItem(element.name, element.id, onClick, isSelected, null, false, [], element.supportTopicList && element.supportTopicList.length > 0 ? element.supportTopicList.map(x => x.id).join(",") : null);
-
-          let categoryMenuItem = this.categories.find((cat: CollapsibleMenuItem) => cat.label === category);
-          if (!categoryMenuItem) {
-            categoryMenuItem = new CollapsibleMenuItem(category, "", null, null, null, false);
-            this.categories.push(categoryMenuItem);
-          }
-
-          categoryMenuItem.subItems.push(menuItem);
+          this.createDetectorMenuItem(element, this.categories);
           if (element.type === DetectorType.Analysis) {
-            let onClickAnalysisParent = () => {
-              this.navigateTo(`analysis/${element.id}`);
-            };
-
-            let isSelectedAnalysis = () => {
-              this.getCurrentRoutePath();
-              return this.currentRoutePath && this.currentRoutePath.join('/') === `analysis/${element.id}`;
-            }
-
-            let analysisMenuItem = new CollapsibleMenuItem(element.name, element.id, onClickAnalysisParent, isSelectedAnalysis, null, true, [], element.supportTopicList && element.supportTopicList.length > 0 ? element.supportTopicList.map(x => x.id).join(",") : null);
-            this.analysisTypes.push(analysisMenuItem);
-
+            //Make a duplicate menu item for analysis
+            this.createDetectorMenuItem(element, this.categories, true);
           }
         });
 
         this.categories.push(new CollapsibleMenuItem("All detectors", "", () => { this.navigateTo("alldetectors"); }, () => { return this.currentRoutePath && this.currentRoutePath.join('/') === `alldetectors`; }, null, false, null));
 
-        if (this.analysisTypes.length > 0) {
-          this.categories.push(new CollapsibleMenuItem("Analysis", "", null, null, null, true, this.analysisTypes));
-        }
         this.categories = this.categories.sort((a, b) => a.label === 'Uncategorized' ? 1 : (a.label > b.label ? 1 : -1));
         this.categoriesCopy = this.deepCopyArray(this.categories);
         this.detectorsLoading = false;
@@ -287,45 +255,63 @@ export class SideNavComponent implements OnInit {
       });
   }
 
+  private createDetectorMenuItem(element: DetectorMetaData, categories: CollapsibleMenuItem[], isAnalysis: boolean = false, isFavoriteDetector: boolean = false) {    
+    const onClick = () => {
+      if(isFavoriteDetector) {
+        this._telemetryService.logEvent(TelemetryEventNames.FavoriteDetectorClicked, {'detectorId': element.id, 'location': 'SideNav'});
+      }
+      this._telemetryService.logEvent(TelemetryEventNames.SideNavigationItemClicked, { "elementId": element.id });
+
+      const path = isAnalysis ? `analysis/${element.id}` : `detectors/${element.id}`;
+      this.navigateTo(path);
+    };
+
+    const isSelected = () => {
+      if (isAnalysis) {
+        this.getCurrentRoutePath();
+        return this.currentRoutePath && this.currentRoutePath.join('/') === `analysis/${element.id}`;
+      } else {
+        return this.currentRoutePath && this.currentRoutePath.join('/') === `detectors/${element.id}`;
+      }
+    };
+
+    let category = "Uncategorized";
+    if(isAnalysis) {
+      category = "Analysis";
+    } else if(element.category) {
+      category = element.category;
+    }
+
+    const menuItem = new CollapsibleMenuItem(element.name, element.id, onClick, isSelected, null, false, [], element.supportTopicList && element.supportTopicList.length > 0 ? element.supportTopicList.map(x => x.id).join(",") : null);
+
+    let categoryMenuItem = categories.find((cat: CollapsibleMenuItem) => cat.label === category);
+
+    //Expand for analysis or pinned detectors section
+    if (!categoryMenuItem) {
+      categoryMenuItem = new CollapsibleMenuItem(category, "", null, null, null, isAnalysis || isFavoriteDetector);
+      categories.push(categoryMenuItem);
+    }
+    categoryMenuItem.subItems.push(menuItem);
+  }
+
+
   initializeFavoriteDetectors() {
     this._diagnosticApiService.getDetectors().subscribe(detectors => {
       this._userSettingService.getUserSetting().subscribe(userSetting => {
+        this.favoriteDetectors = [];
+        this.favoriteDetectorsCopy = [];
         const favoriteDetectorIds = Object.keys(userSetting.favoriteDetectors);
 
         const favoriteDetectorsMetaData = detectors.filter(detector => {
           return favoriteDetectorIds.indexOf(detector.id) > -1 && userSetting.favoriteDetectors[detector.id].type === detector.type;
         });
-
-        //For showing same order as in overview page
-        favoriteDetectorsMetaData.forEach(d => {
-          if (!d.category) d.category = "Uncategorized";
-        });
-        favoriteDetectorsMetaData.sort((a, b) => {
-          if(a.category === b.category) return a.name > b.name ? 1 : -1;
-          else return a.category > b.category ? 1 : -1;
+        favoriteDetectorsMetaData.forEach(element => {
+          this.createDetectorMenuItem(element, this.favoriteDetectors, element.type === DetectorType.Analysis, true);
         });
 
-        this.favoriteDetectors = favoriteDetectorsMetaData.map(element => {
-          const isAnalysis = element.type === DetectorType.Analysis;
-          const onClick = () => {
-            this._telemetryService.logEvent(TelemetryEventNames.FavoriteDetectorClicked, {'detectorId': element.id, 'location': 'SideNav'});
-            const path = isAnalysis ? `analysis/${element.id}` : `detectors/${element.id}`;
-            this.navigateTo(path);
-          };
-          const isSelected = () => {
-            if (isAnalysis) {
-              this.getCurrentRoutePath();
-              return this.currentRoutePath && this.currentRoutePath.join('/') === `analysis/${element.id}`;
-            } else {
-              this.currentRoutePath && this.currentRoutePath.join('/') === `detectors/${element.id}`
-            }
-          }
-          let menuItem = new CollapsibleMenuItem(element.name, element.id, onClick, isSelected, null, false, [], element.supportTopicList && element.supportTopicList.length > 0 ? element.supportTopicList.map(x => x.id).join(",") : null);
-          return menuItem;
-        });
-
-        this.favoriteDetectorsCopy = [...this.favoriteDetectors];
-      })
+        this.favoriteDetectors = this.favoriteDetectors.sort((a, b) => a.label === 'Uncategorized' ? 1 : (a.label > b.label ? 1 : -1));
+        this.favoriteDetectorsCopy = this.deepCopyArray(this.favoriteDetectors);
+      });
     });
   }
 
