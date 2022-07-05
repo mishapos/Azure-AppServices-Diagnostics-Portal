@@ -9,6 +9,7 @@ import { DetectorType, StringUtilities } from 'diagnostic-data';
 import { TelemetryService } from '../../../../../../diagnostic-data/src/lib/services/telemetry/telemetry.service';
 import { TelemetryEventNames } from '../../../../../../diagnostic-data/src/lib/services/telemetry/telemetry.common';
 import { environment } from '../../../../environments/environment';
+import { UserSettingService } from '../services/user-setting.service';
 
 @Component({
   selector: 'side-nav',
@@ -30,15 +31,18 @@ export class SideNavComponent implements OnInit {
   gists: CollapsibleMenuItem[] = [];
   gistsCopy: CollapsibleMenuItem[] = [];
 
+  favoriteDetectors: CollapsibleMenuItem[] = [];
+  favoriteDetectorsCopy: CollapsibleMenuItem[] = [];
+
   searchValue: string = undefined;
   searchAriaLabel: string = "Filter by name or id";
 
   contentHeight: string;
 
   getDetectorsRouteNotFound: boolean = false;
-  isGraduation:boolean = false;
-  isProd:boolean = false;
-  constructor(private _router: Router, private _activatedRoute: ActivatedRoute, private _adalService: AdalService, private _diagnosticApiService: ApplensDiagnosticService, public resourceService: ResourceService, private _telemetryService: TelemetryService) {
+  isGraduation: boolean = false;
+  isProd: boolean = false;
+  constructor(private _router: Router, private _activatedRoute: ActivatedRoute, private _adalService: AdalService, private _diagnosticApiService: ApplensDiagnosticService, public resourceService: ResourceService, private _telemetryService: TelemetryService, private _userSettingService: UserSettingService) {
     this.contentHeight = (window.innerHeight - 139) + 'px';
     if (environment.adal.enabled) {
       let alias = this._adalService.userInfo.profile ? this._adalService.userInfo.profile.upn : '';
@@ -131,21 +135,21 @@ export class SideNavComponent implements OnInit {
 
 
   activePullRequest: CollapsibleMenuItem[] = [
-  {
-    id: "",
-    label : 'Your Active Pull Request',
-    onClick: () => {
-      let alias = Object.keys(this._adalService.userInfo.profile).length > 0 ? this._adalService.userInfo.profile.upn : '';
-    const userId: string = alias.replace('@microsoft.com', '');
-    if (userId.length > 0) {
-      this.navigateTo(`users/${userId}/activepullrequests`);
-    }
-    },
-    expanded: false,
-    subItems: null,
-    isSelected: null,
-    icon: null
-  }];
+    {
+      id: "",
+      label: 'Your Active Pull Request',
+      onClick: () => {
+        let alias = Object.keys(this._adalService.userInfo.profile).length > 0 ? this._adalService.userInfo.profile.upn : '';
+        const userId: string = alias.replace('@microsoft.com', '');
+        if (userId.length > 0) {
+          this.navigateTo(`users/${userId}/activepullrequests`);
+        }
+      },
+      expanded: false,
+      subItems: null,
+      isSelected: null,
+      icon: null
+    }];
 
   ngOnInit() {
     this.initializeDetectors();
@@ -155,6 +159,7 @@ export class SideNavComponent implements OnInit {
       this.getCurrentRoutePath();
     });
     this.initializeActivePullRequestTab();
+    this.initializeFavoriteDetectors();
   }
 
   navigateToOverview() {
@@ -230,7 +235,7 @@ export class SideNavComponent implements OnInit {
 
         this.categories.push(new CollapsibleMenuItem("All detectors", "", () => { this.navigateTo("alldetectors"); }, () => { return this.currentRoutePath && this.currentRoutePath.join('/') === `alldetectors`; }, null, false, null));
 
-        if(this.analysisTypes.length > 0) {
+        if (this.analysisTypes.length > 0) {
           this.categories.push(new CollapsibleMenuItem("Analysis", "", null, null, null, true, this.analysisTypes));
         }
         this.categories = this.categories.sort((a, b) => a.label === 'Uncategorized' ? 1 : (a.label > b.label ? 1 : -1));
@@ -282,8 +287,50 @@ export class SideNavComponent implements OnInit {
       });
   }
 
+  initializeFavoriteDetectors() {
+    this._diagnosticApiService.getDetectors().subscribe(detectors => {
+      this._userSettingService.getUserSetting().subscribe(userSetting => {
+        const favoriteDetectorIds = Object.keys(userSetting.favoriteDetectors);
+
+        const favoriteDetectorsMetaData = detectors.filter(detector => {
+          return favoriteDetectorIds.indexOf(detector.id) > -1 && userSetting.favoriteDetectors[detector.id].type === detector.type;
+        });
+
+        //For showing same order as in overview page
+        favoriteDetectorsMetaData.forEach(d => {
+          if (!d.category) d.category = "Uncategorized";
+        });
+        favoriteDetectorsMetaData.sort((a, b) => {
+          if(a.category === b.category) return a.name > b.name ? 1 : -1;
+          else return a.category > b.category ? 1 : -1;
+        });
+
+        this.favoriteDetectors = favoriteDetectorsMetaData.map(element => {
+          const isAnalysis = element.type === DetectorType.Analysis;
+          const onClick = () => {
+            this._telemetryService.logEvent(TelemetryEventNames.FavoriteDetectorClicked, {'detectorId': element.id, 'location': 'SideNav'});
+            const path = isAnalysis ? `analysis/${element.id}` : `detectors/${element.id}`;
+            this.navigateTo(path);
+          };
+          const isSelected = () => {
+            if (isAnalysis) {
+              this.getCurrentRoutePath();
+              return this.currentRoutePath && this.currentRoutePath.join('/') === `analysis/${element.id}`;
+            } else {
+              this.currentRoutePath && this.currentRoutePath.join('/') === `detectors/${element.id}`
+            }
+          }
+          let menuItem = new CollapsibleMenuItem(element.name, element.id, onClick, isSelected, null, false, [], element.supportTopicList && element.supportTopicList.length > 0 ? element.supportTopicList.map(x => x.id).join(",") : null);
+          return menuItem;
+        });
+
+        this.favoriteDetectorsCopy = [...this.favoriteDetectors];
+      })
+    });
+  }
+
   private initializeActivePullRequestTab() {
-    this._diagnosticApiService.getDevopsConfig(`${this.resourceService.ArmResource.provider}/${this.resourceService.ArmResource.resourceTypeName}`).subscribe(config =>{
+    this._diagnosticApiService.getDevopsConfig(`${this.resourceService.ArmResource.provider}/${this.resourceService.ArmResource.resourceTypeName}`).subscribe(config => {
       this.isGraduation = config.graduationEnabled;
     })
     this._diagnosticApiService.getDetectorDevelopmentEnv().subscribe(env => {
@@ -306,22 +353,17 @@ export class SideNavComponent implements OnInit {
       return this.currentRoutePath && this.currentRoutePath.join('/').toLowerCase().startsWith(path.toLowerCase());
   };
 
-  updateSearchValue(e: { newValue: any }) {
-    if (!!e.newValue.currentTarget && !!e.newValue.currentTarget.value) {
-      this.searchValue = e.newValue.currentTarget.value;
-      this.updateMenuItems(this.categories, this.searchValue);
-    }
-  }
 
   updateSearch(searchTerm: string) {
     this.searchValue = searchTerm;
     this.categories = this.updateMenuItems(this.categoriesCopy, searchTerm);
     this.gists = this.updateMenuItems(this.gistsCopy, searchTerm);
-    
+    this.favoriteDetectors = this.updateMenuItems(this.favoriteDetectorsCopy, searchTerm);
+
     const subDetectorCount = this.contSubMenuItems(this.categories);
     const subGistCount = this.contSubMenuItems(this.gists);
-    const detectorAriaLabel = `${subDetectorCount > 0 ? subDetectorCount : 'No'} ${subDetectorCount > 1 ? 'Detectors' : 'Detector' }`;
-    const gistAriaLabel = `${subGistCount > 0 ? subGistCount : 'No'} ${subGistCount > 1 ? 'Gists' : 'Gist' }`;
+    const detectorAriaLabel = `${subDetectorCount > 0 ? subDetectorCount : 'No'} ${subDetectorCount > 1 ? 'Detectors' : 'Detector'}`;
+    const gistAriaLabel = `${subGistCount > 0 ? subGistCount : 'No'} ${subGistCount > 1 ? 'Gists' : 'Gist'}`;
     this.searchAriaLabel = `${detectorAriaLabel} And ${gistAriaLabel} Found for ${this.searchValue}`;
   }
 
@@ -370,8 +412,8 @@ export class SideNavComponent implements OnInit {
 
   private contSubMenuItems(items: CollapsibleMenuItem[]): number {
     let count = 0;
-    for(let item of items) {
-      if(item.subItems && item.subItems.length > 0) {
+    for (let item of items) {
+      if (item.subItems && item.subItems.length > 0) {
         count = count + item.subItems.length;
       }
     }
