@@ -37,7 +37,6 @@ export class SupportTopicService {
         { name: "Outbound Connectivity", supportTopicId: "32820919", sapSupportTopicId: "1653e0e2-8249-fb67-6d0e-767fa14d79b2" }, // Web App (Windows)\Networking\Outbound Connectivity
         { name: "Outbound Connectivity", supportTopicId: "32820919", sapSupportTopicId: "1653e0e2-8249-fb67-6d0e-767fa14d79b2" }, // Web App for Containers\Networking\Outbound Connectivity
         { name: "Outbound Connectivity", supportTopicId: "32820562", sapSupportTopicId: "8856038e-a071-236e-9823-41313ee4cb85" }, // Function App\Networking\Outbound Connectivity
-        { name: "VNet Integration", supportTopicId: "32683732", sapSupportTopicId: "5724df2a-a62a-59cc-83aa-1525fbc22377" }, // Function App\Networking\Outbound Connectivity
     ];
 
     private solutionOrchestratorConfig = {
@@ -65,6 +64,7 @@ export class SupportTopicService {
 
 
     getPathForSupportTopic(supportTopicId: string, pesId: string, searchTerm: string, sapSupportTopicId: string = "", sapProductId: string = ""): Observable<any> {
+
         this.supportTopicId = supportTopicId;
         this.sapSupportTopicId = sapSupportTopicId;
         this.sapProductId = sapProductId;
