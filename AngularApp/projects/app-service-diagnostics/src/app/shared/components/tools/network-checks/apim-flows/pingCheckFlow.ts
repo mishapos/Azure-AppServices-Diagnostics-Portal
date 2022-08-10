@@ -136,7 +136,7 @@ async function displayPingData(diagProvider: DiagProvider, resId: string, author
 }
 
 export const pingCheckFlow: NetworkCheckFlow = {
-    title: "Dependency Access Issues",
+    title: "Connection Issues",
     id: "pingCheckFlow",
 
     func: async (siteInfo, diagProvider, flowMgr) => {
@@ -160,6 +160,21 @@ export const pingCheckFlow: NetworkCheckFlow = {
             description: "Perform a Ping Request",
             inputs: [
                 {
+                    itype: InputType.DropDown,
+                    id: "region",
+                    description: "Location",
+                    value: 0,
+                    options: locations
+                },
+                {
+                    itype: InputType.DropDown,
+                    id: "protocol",
+                    description: "Protocol",
+                    // tooltip: "extra info",
+                    value: 0,
+                    options: ["HTTPS", "HTTP", "TCP"],
+                },
+                {
                     itype: InputType.TextBox,
                     id: "ipaddr",
                     description: "URL or IP address",
@@ -174,21 +189,6 @@ export const pingCheckFlow: NetworkCheckFlow = {
                     // tooltip: "extra info",
                     value: "80"
                 },
-                {
-                    itype: InputType.DropDown,
-                    id: "protocol",
-                    description: "Protocol",
-                    // tooltip: "extra info",
-                    value: 0,
-                    options: ["HTTPS", "HTTP", "TCP"],
-                },
-                {
-                    itype: InputType.DropDown,
-                    id: "region",
-                    description: "Location",
-                    value: 0,
-                    options: locations
-                }
             ],
             expandByDefault: false,
             buttonText: "Send Request",

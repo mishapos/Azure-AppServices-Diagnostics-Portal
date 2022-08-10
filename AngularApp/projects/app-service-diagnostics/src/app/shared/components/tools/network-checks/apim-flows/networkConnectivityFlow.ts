@@ -8,7 +8,7 @@ import { routeTableCheck } from './checks/routeTableCheck';
 import { ApiManagementServiceResourceContract } from './contracts/APIMService';
 
 export const networkConnectivityFlow: NetworkCheckFlow = {
-    title: "Network Connectivity Issues",
+    title: "Network Configuration Issues",
     id: "networkCheckFlow",
 
     func: async (siteInfo, diagProvider, flowMgr) => {
