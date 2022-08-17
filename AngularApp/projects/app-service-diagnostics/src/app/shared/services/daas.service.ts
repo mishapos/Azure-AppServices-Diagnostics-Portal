@@ -11,7 +11,6 @@ import { DiagnoserDefinition, DatabaseTestConnectionResult, MonitoringSession, M
 import { SiteInfoMetaData } from '../models/site';
 import { SiteService } from './site.service';
 import { StorageAccountProperties } from '../../shared-v2/services/shared-storage-account.service';
-import moment = require('moment');
 
 const BlobContainerName: string = "memorydumps";
 

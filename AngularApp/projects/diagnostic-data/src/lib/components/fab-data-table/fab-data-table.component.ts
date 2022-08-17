@@ -57,7 +57,7 @@ export class FabDataTableComponent implements AfterContentInit {
   filterSelectionMap: Map<string, Set<string>> = new Map<string, Set<string>>();
   @ViewChild(FabDetailsListComponent, { static: true }) fabDetailsList: FabDetailsListComponent;
   @ViewChild('emptyTableFooter', { static: true }) emptyTableFooter: TemplateRef<any>;
-  @ViewChild(FabSearchBoxComponent, { static: false }) fabSearchBox: any;
+  @ViewChild(FabSearchBoxComponent) fabSearchBox: any;
   tableObserve = new BehaviorSubject<DataTableResponseObject>(null);
   selection: ISelection = new Selection({
     onSelectionChanged: () => {

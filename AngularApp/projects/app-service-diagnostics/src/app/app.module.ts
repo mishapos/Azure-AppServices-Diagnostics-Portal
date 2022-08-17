@@ -69,7 +69,7 @@ import { GenericThemeService } from 'diagnostic-data';
       },
       {
         path: 'resource',
-        loadChildren: './resources/resources.module#ResourcesModule',
+        loadChildren: () => import('./resources/resources.module').then(m => m.ResourcesModule),
       }
     ],
     ),

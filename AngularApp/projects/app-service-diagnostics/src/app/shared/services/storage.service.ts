@@ -5,9 +5,9 @@ import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ResponseMessageCollectionEnvelope, ResponseMessageEnvelope } from '../models/responsemessageenvelope';
 import { StorageAccount, StorageKeys, NewStorageAccount, SasUriPostBody, SasUriPostResponse, NewContainer } from '../models/storage';
-import moment = require('moment');
 import { HttpResponse } from '@angular/common/http';
 import { ArmResource } from '../../shared-v2/models/arm';
+import * as moment from "moment";
 
 @Injectable({
   providedIn: 'root'
