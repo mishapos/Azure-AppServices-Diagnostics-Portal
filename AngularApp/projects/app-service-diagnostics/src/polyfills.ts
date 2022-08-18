@@ -67,6 +67,9 @@ import 'web-animations-js';  // Run `npm install --save web-animations-js`.
 
 (window as any).global = window;
 
+// https://stackoverflow.com/questions/50313745/angular-6-process-is-not-defined-when-trying-to-serve-application
+(window as any).process = { env: { DEBUG: undefined }, };
+
  /*
  * in IE/Edge developer tools, the addEventListener will also be wrapped by zone.js
  * with the following flag, it will bypass `zone.js` patch for IE/Edge
