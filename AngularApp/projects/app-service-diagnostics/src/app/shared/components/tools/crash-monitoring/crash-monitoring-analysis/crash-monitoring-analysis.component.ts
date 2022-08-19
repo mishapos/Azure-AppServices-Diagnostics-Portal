@@ -4,7 +4,7 @@ import { DaasService } from '../../../../services/daas.service';
 import { SiteService } from '../../../../services/site.service';
 import * as momentNs from 'moment';
 import { CrashMonitoringSettings, DaasStorageConfiguration } from '../../../../models/daas';
-import moment = require('moment');
+import * as moment from 'moment';
 import { Subscription, interval, Observable } from 'rxjs';
 import { SiteDaasInfo } from '../../../../models/solution-metadata';
 import { Globals } from '../../../../../globals'
