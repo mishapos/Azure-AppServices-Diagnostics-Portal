@@ -259,7 +259,7 @@ import { GenericPortalService } from './services/generic-portal.service';
   ],
 })
 export class DiagnosticDataModule {
-  static forRoot(config: DiagnosticDataConfig = INTERNAL_PROD_CONFIGURATION): ModuleWithProviders {
+  static forRoot(config: DiagnosticDataConfig = INTERNAL_PROD_CONFIGURATION): ModuleWithProviders<DiagnosticDataModule> {
     return {
       ngModule: DiagnosticDataModule,
       providers: [
