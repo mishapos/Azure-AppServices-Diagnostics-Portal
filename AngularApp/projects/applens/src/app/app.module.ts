@@ -180,10 +180,10 @@ export const Routes = RouterModule.forRoot([
       provide: UrlSerializer,
       useClass: CustomUrlSerializerService
     },
-    {
-      provide: ErrorHandler,
-      useClass: UnhandledExceptionHandlerService
-    },
+    // {
+    //   provide: ErrorHandler,
+    //   useClass: UnhandledExceptionHandlerService
+    // },
     { provide: GenericThemeService, useExisting: ApplensThemeService }
   ],
   bootstrap: [AppComponent]

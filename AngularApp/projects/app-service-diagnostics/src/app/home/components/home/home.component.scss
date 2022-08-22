@@ -134,3 +134,134 @@
 .home-banner-prod {
     background-color: var(--homeBannerProd);
 }
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+main {
+  display: flex;
+  height: 60vh;
+  width: 70vw;
+}
+
+#canvas {
+  height: calc(100% - 50px);
+  background: #f0f0f0;
+  flex: 1;
+  margin: 50px 0 0 50px;
+  background-size: 30px 30px;
+  background-image: linear-gradient(to right, #d9d9d9 1px, transparent 1px),
+      linear-gradient(to bottom, #d9d9d9 1px, transparent 1px);
+}
+
+#palette {
+  width: 300px;
+  padding: 16px;
+}
+
+#palette .plugin-op {
+  padding: 12px;
+  user-select: none;
+  display: block;
+}
+
+#palette .plugin-op:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+section {
+  padding: 1em;
+  border-bottom: 1px solid lightgrey;
+}
+
+section .wide {
+  width: 100%;
+}
+
+.sub-section {
+  padding: 0.5em 0;
+}
+
+select {
+  padding: 0.3em;
+}
+
+.card {
+  padding: 1em;
+  background: white;
+  box-shadow: 0px 4px 2em rgba(22, 33, 74, 0.05);
+  border-radius: 4px;
+  min-width: 12em;
+  min-height: 10em;
+}
+
+.condition {
+  background: white;
+  box-shadow: 0px 4px 2em rgba(22, 33, 74, 0.05);
+  min-height: 6em;
+  min-width: 20em;
+}
+
+.choose {
+  padding: 1em;
+  height: 10em;
+  min-width: 40em;
+
+}
+
+.iftrue {
+  border: 1px solid green;
+}
+
+.iffalse {
+  border: 1px solid red;
+}
+
+.msla-card-title-group {
+  display: flex;
+  overflow: hidden;
+  flex: 1 1 auto;
+  align-items: center;
+  cursor: pointer;
+}
+
+.msla-card-header-title-view {
+  cursor: pointer;
+  color: #000;
+  overflow: hidden;
+  outline: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  height: inherit;
+  padding-left: 10px;
+  display: flex;
+}
+
+.msla-image-header {
+  width: 23px;
+  height: 23px;
+  display: inline-block;
+}
+
+.completer-style  {
+  width: 270px;
+  height: 40px;
+}
+
+div#canvas[disabled="true"] {
+  opacity: .7;
+}
+
+div#canvas[disabled="true"] ::ng-deep.ngflowchart-step-wrapper {
+  opacity: .7;
+}
+
+::ng-deep .completer-input{
+  width: 270px;
+  height: 40px;
+} 

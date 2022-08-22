@@ -58,6 +58,7 @@ import { SolutionOrchestratorComponent } from "diagnostic-data";
 import { LinuxNodeHeapDumpComponent } from '../shared/components/tools/linux-node-heap-dump/linux-node-heap-dump.component';
 import { LinuxNodeCpuProfilerComponent } from '../shared/components/tools/linux-node-cpu-profiler/linux-node-cpu-profiler.component';
 import { LinuxPythonCpuProfilerComponent } from '../shared/components/tools/linux-python-cpu-profiler/linux-python-cpu-profiler.component';
+import { NgFlowchartModule, NgFlowchartStepRegistry } from '@joelwenzel/ng-flowchart';
 
 export const HomeRoutes = RouterModule.forChild([
     {
@@ -677,7 +678,8 @@ export const HomeRoutes = RouterModule.forChild([
         MarkdownModule.forRoot(),
         FabSearchBoxModule,
         FabCommandBarModule,
-        FabSpinnerModule
+        FabSpinnerModule,
+        NgFlowchartModule
     ],
     declarations: [HomeContainerComponent, HomeComponent, CategoryChatComponent, CategoryTileComponent, SearchResultsComponent, SupportTopicRedirectComponent, DiagnosticsSettingsComponent, CategoryTileV4Component, RiskTileComponent],
     providers:
@@ -692,6 +694,7 @@ export const HomeRoutes = RouterModule.forChild([
             MetricsPerInstanceAppServicePlanResolver,
             AdvanceApplicationRestartResolver,
             SecurityScanningResolver,
+            NgFlowchartStepRegistry,
             { provide: GenericSupportTopicService, useExisting: SupportTopicService },
             { provide: GenericContentService, useExisting: ContentService },
             { provide: GenericDocumentsSearchService, useExisting: DocumentSearchService },

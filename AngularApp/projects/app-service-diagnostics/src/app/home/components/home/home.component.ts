@@ -1,5 +1,5 @@
 import { DetectorControlService, FeatureNavigationService, DetectorResponse, TelemetryEventNames, ResourceDescriptor, TelemetrySource, LoadingStatus } from 'diagnostic-data';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Category } from '../../../shared-v2/models/category';
 import { CategoryService } from '../../../shared-v2/services/category.service';
@@ -14,7 +14,7 @@ import { TelemetryService } from 'diagnostic-data';
 import { WebSitesService } from '../../../resources/web-sites/services/web-sites.service';
 import { AppType } from '../../../shared/models/portal';
 import { DiagnosticService } from 'diagnostic-data';
-import { HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Globals } from '../../../globals';
 import { PortalActionService } from '../../../shared/services/portal-action.service';
 import { allowV3PResourceTypeList, VersionTestService } from '../../../fabric-ui/version-test.service';
@@ -29,12 +29,46 @@ import { mergeMap } from 'rxjs-compat/operator/mergeMap';
 import { ABTestingService } from '../../../shared/services/abtesting.service';
 import { SlotType } from '../../../shared/models/slottypes';
 
+import {
+    NgFlowchartCanvasDirective,
+    NgFlowchartStepRegistry,
+    NgFlowchart
+  } from '@joelwenzel/ng-flowchart';
+
+export class workflow {
+    root: workflowNode;
+}
+export class workflowNode {
+    id: string;
+    type: string;
+    data: workflowNodeData;
+    children: workflowNode[];
+}
+
+export class workflowNodeData {
+    name: string = '';
+    detectorId: string = '';
+    isEditing: boolean = false;
+    queryText: string = '';
+    queryTextTemp: string = '';
+    isEditingQuery: boolean = false;
+    completionOptions: string[] = [];
+    conditionValue: string;
+}
+
 @Component({
     selector: 'home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, AfterViewInit {
+
+    callbacks: NgFlowchart.Callbacks = {};
+    options: NgFlowchart.Options = {
+      stepGap: 40,
+      rootPosition: 'TOP_CENTER'
+    };
+
     useLegacy: boolean = true;
     resourceName: string;
     categories: Category[];
@@ -60,6 +94,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     abTestingBannerText: string = "";
     disableGenie: boolean = false;
 
+    @ViewChild('normalStep')
+    normalStepTemplate: TemplateRef<any>;
+  
+    @ViewChild(NgFlowchartCanvasDirective)
+    canvas: NgFlowchartCanvasDirective;
+
+
     get showSwitchBanner(): boolean {
         const typeSwitchItem = allowV3PResourceTypeList.find(item => this._resourceService.resource && this._resourceService.resource.type && this._resourceService.resource.type.toLowerCase() === item.type.toLowerCase());
         const allowResourceTypeSwitch = typeSwitchItem === undefined ? false : typeSwitchItem.allowSwitchBack;
@@ -83,7 +124,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     constructor(private _resourceService: ResourceService, private _categoryService: CategoryService, private _notificationService: NotificationService, private _router: Router,
         private _detectorControlService: DetectorControlService, private _featureService: FeatureService, private _logger: LoggingV2Service, private _authService: AuthService,
         private _navigator: FeatureNavigationService, private _activatedRoute: ActivatedRoute, private armService: ArmService, private _telemetryService: TelemetryService, private _diagnosticService: DiagnosticService, private _portalService: PortalActionService, private globals: Globals,
-        private versionTestService: VersionTestService, private subscriptionPropertiesService: SubscriptionPropertiesService, private _quickLinkService: QuickLinkService, private _riskAlertService: RiskAlertService, public abTestingService: ABTestingService) {
+        private versionTestService: VersionTestService, private subscriptionPropertiesService: SubscriptionPropertiesService, private _quickLinkService: QuickLinkService, private _riskAlertService: RiskAlertService, public abTestingService: ABTestingService,
+        private stepRegistry: NgFlowchartStepRegistry, private http: HttpClient) {
 
         this.subscriptionId = this._activatedRoute.snapshot.params['subscriptionid'];
         this.versionTestService.isLegacySub.subscribe(isLegacy => this.useLegacy = isLegacy);
@@ -181,6 +223,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
+
+        let wf = new workflow();
+        let wfNode = new workflowNode();
+        wfNode.type = "detector";
+        wfNode.data = new workflowNodeData();
+        wfNode.data.name = "foo" + "1";
+        wfNode.data.detectorId = "foo";
+        wfNode.children = [];
+        wf.root = wfNode;
+        this.canvas.getFlow().upload(wf);
+
         this.providerRegisterUrl = `/subscriptions/${this.subscriptionId}/providers/Microsoft.ChangeAnalysis/register`;
         if (!this._detectorControlService.startTime) {
             this._detectorControlService.setDefault();
@@ -232,8 +285,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     };
 
     ngAfterViewInit() {
+
+        this.stepRegistry.registerStep('sample-step', this.normalStepTemplate);
+    this.stepRegistry.registerStep('do-action', this.normalStepTemplate);
+    this.stepRegistry.registerStep('notification', this.normalStepTemplate);
+    this.stepRegistry.registerStep('log', this.normalStepTemplate);
+    this.showUpload();
+
         this._telemetryService.logPageView(TelemetryEventNames.HomePageLoaded, { "numCategories": this.categories.length.toString() });
-        if(document.querySelector("fab-command-bar")){
+        if (document.querySelector("fab-command-bar")) {
             const ele = <HTMLInputElement>document.querySelector("fab-command-bar");
             ele.focus();
         }
@@ -392,7 +452,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.isPreview = this.abTestingService.isPreview;
         var isContainerApps = this._resourceService && !!this._resourceService.resource &&
             (this._resourceService.resource.type.toLowerCase() === 'microsoft.web/containerapps' ||
-            this._resourceService.resource.type.toLowerCase() === 'microsoft.app/containerapps');
+                this._resourceService.resource.type.toLowerCase() === 'microsoft.app/containerapps');
         var isArcApplianceApps = this._resourceService && !!this._resourceService.resource && this._resourceService.resource.type.toLowerCase() === 'microsoft.resourceConnector/appliances';
 
         this.enableABTesting = this.abTestingService.enableABTesting && !isContainerApps && !isArcApplianceApps;
@@ -408,9 +468,52 @@ export class HomeComponent implements OnInit, AfterViewInit {
     openSlotInNewTab(event: Event) {
         event.stopPropagation();
         const url = this.abTestingService.generateSlotLink();
-        this._telemetryService.logEvent(TelemetryEventNames.OpenSlotInNewTab,{
+        this._telemetryService.logEvent(TelemetryEventNames.OpenSlotInNewTab, {
             currentSlot: SlotType[this.abTestingService.slot]
         });
         window.open(url);
     }
+
+    showUpload() {
+        let jsonString = "{ \"root\": { \"id\": \"s1608918280530\", \"type\": \"sample-step\", \"data\": { \"name\": \"Do Action\", \"inputs\": [ { \"name\": \"ACTION\", \"value\": \"TRANSLATE\" } ] }, \"children\": [ { \"id\": \"s1608918283650\", \"type\": \"do-action\", \"data\": { \"name\": \"Do Action\", \"inputs\": [ { \"name\": \"ACTION\", \"value\": null } ] }, \"children\": [ ] } ] } }";
+        this.canvas.getFlow().upload(jsonString);
+      }
+    
+      showFlowData() {
+        let json = this.canvas.getFlow().toJSON(4);
+    
+        var x = window.open();
+        x.document.open();
+        x.document.write(
+          '<html><head><title>Flowchart Json</title></head><body><pre>' +
+            json +
+            '</pre></body></html>'
+        );
+        x.document.close();
+      }
+    
+      clearData() {
+        this.canvas.getFlow().clear();
+      }
+    
+      onGapChanged(event) {
+        this.options = {
+          ...this.options,
+          stepGap: parseInt(event.target.value)
+        };
+      }
+    
+      onSequentialChange(event) {
+        this.options = {
+          ...this.options,
+          isSequential: event.target.checked
+        };
+      }
+    
+      onDelete(id) {
+        this.canvas
+          .getFlow()
+          .getStep(id)
+          .destroy(true);
+      }
 }
