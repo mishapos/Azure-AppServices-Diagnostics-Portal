@@ -7,14 +7,18 @@
 }
 .container {
     min-width: 500px;
-    // width: 80%;
-    // max-width: 750px;
-    width: auto;
+    width: 80%;
+    max-width: 750px;
     margin-left: 0px;
     .error-section{
         .error-message{
             color: red;
         }
+    }
+
+    &.apim-container {
+        width: auto;
+        max-width: none;
     }
 }
 
