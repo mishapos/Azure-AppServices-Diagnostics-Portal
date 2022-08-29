@@ -97,7 +97,7 @@ export const Routes = RouterModule.forRoot([
             loadChildren: './modules/stamp/stamp.module#StampModule'
           },
           {
-            path: 'icm/:incidentId',
+            path: 'icm',
             loadChildren: './modules/incidentassist/incidentassist.module#IncidentAssistModule'
           },
           {
@@ -116,6 +116,11 @@ export const Routes = RouterModule.forRoot([
             path: 'subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/:provider/:resourceTypeName/:resourceName',
             loadChildren: './modules/dashboard/dashboard.module#DashboardModule',
             resolve: { validResources: ValidResourceResolver }
+          },
+          //For '/resourceGroup' case insensitive
+          {
+            path: 'subscriptions/:subscriptionId/resourcegroups/:resourceGroup/providers/:provider/:resourceTypeName/:resourceName',
+            redirectTo: 'subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/:provider/:resourceTypeName/:resourceName',
           },
           {
             path: 'stamps/:stampName',
