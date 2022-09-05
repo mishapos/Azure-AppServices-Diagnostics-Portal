@@ -25,8 +25,8 @@
     "bundle-report": "webpack-bundle-analyzer ../Backend/wwwroot/stats.json -p 8889"
   },
   "dependencies": {
-    "@angular-react/core": "3.0.0",
-    "@angular-react/fabric": "3.0.0",
+    "@angular-react/core": "4.0.0",
+    "@angular-react/fabric": "4.0.0",
     "@angular/animations": "^10.2.5",
     "@angular/cdk": "^7.3.7",
     "@angular/common": "10.2.5",
