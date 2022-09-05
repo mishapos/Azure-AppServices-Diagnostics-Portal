@@ -10,7 +10,6 @@ import { FormatHelper } from '../../utilities/formattingHelper';
 import { ActivatedRoute } from '@angular/router';
 import { Globals } from '../../../globals';
 import { TelemetryService } from 'diagnostic-data';
-import { ITooltipOptions } from '@angular-react/fabric';
 import { DirectionalHint } from 'office-ui-fabric-react';
 import { WebSitesService } from '../../../resources/web-sites/services/web-sites.service';
 import { OperatingSystem } from '../../models/site';
@@ -45,7 +44,7 @@ export class DaasSessionsComponent implements OnChanges, OnDestroy {
   directionalHint = DirectionalHint.rightTopEdge;
   toolTipStyles = { 'backgroundColor': 'black', 'color': 'white', 'border': '0px' };
 
-  toolTipOptionsValue: ITooltipOptions = {
+  toolTipOptionsValue: any = {
     calloutProps: {
       styles: {
         beak: this.toolTipStyles,

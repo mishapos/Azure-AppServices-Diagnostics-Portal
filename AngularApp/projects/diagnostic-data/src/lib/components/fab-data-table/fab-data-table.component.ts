@@ -1,10 +1,10 @@
-import { FabDetailsListComponent, FabSearchBoxComponent } from '@angular-react/fabric';
 import { AfterContentInit, Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { DetailsListLayoutMode, IColumn, IListProps, ISelection, SelectionMode, Selection } from 'office-ui-fabric-react';
 import { BehaviorSubject } from 'rxjs';
 import { DataTableResponseObject } from '../../models/detector';
 import { TableColumnOption, TableFilter, TableFilterSelectionOption } from '../../models/data-table';
 import { TelemetryService } from '../../services/telemetry/telemetry.service';
+import { FabDetailsListComponent, FabSearchBoxComponent } from '@angular-react/fabric';
 
 
 const columnMinWidth: number = 100;
@@ -98,7 +98,8 @@ export class FabDataTableComponent implements AfterContentInit {
 
       //Ideally,it should be enable if table is too large.
       //But for now, if enabled, it will show only 40 rows
-      this.fabDetailsList.onShouldVirtualize = (list: IListProps<any>) => {
+
+      this.fabDetailsList.onShouldVirtualize = () => {
         // return this.rows.length > this.rowLimit ? true : false;
         return false;
       }

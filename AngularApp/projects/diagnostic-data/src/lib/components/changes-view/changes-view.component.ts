@@ -4,7 +4,7 @@ import { DetectorControlService } from '../../services/detector-control.service'
 import { TelemetryService } from '../../services/telemetry/telemetry.service';
 import { TelemetryEventNames } from '../../services/telemetry/telemetry.common';
 import { DetectorResponse, DiagnosticData, DataTableResponseObject, Rendering, RenderingType } from '../../models/detector';
-import { MatTableDataSource} from '@angular/material';
+import { MatTableDataSource} from '@angular/material/table';
 import { Change, ChangeLevel } from '../../models/changesets';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import * as momentNs from 'moment';

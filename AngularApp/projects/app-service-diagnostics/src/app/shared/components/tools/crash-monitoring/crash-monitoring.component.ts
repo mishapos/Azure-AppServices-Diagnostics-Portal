@@ -10,7 +10,6 @@ import { TelemetryService, TelemetryEventNames } from 'diagnostic-data';
 import { SharedStorageAccountService } from 'projects/app-service-diagnostics/src/app/shared-v2/services/shared-storage-account.service';
 import { CrashMonitoringSettings } from '../../../models/daas';
 import { DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
-import { ITooltipOptions } from '@angular-react/fabric';
 import { CrashMonitoringAnalysisComponent } from './crash-monitoring-analysis/crash-monitoring-analysis.component';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -69,7 +68,7 @@ export class CrashMonitoringComponent implements OnInit {
   directionalHint = DirectionalHint.rightTopEdge;
   toolTipStyles = { 'backgroundColor': 'black', 'color': 'white', 'border': '0px' };
 
-  toolTipOptionsValue: ITooltipOptions = {
+  toolTipOptionsValue: any = {
     calloutProps: {
       styles: {
         beak: this.toolTipStyles,

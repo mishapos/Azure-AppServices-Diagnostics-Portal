@@ -10,7 +10,6 @@ import { SiteDaasInfo } from '../../../../models/solution-metadata';
 import { Globals } from '../../../../../globals'
 import { TelemetryService } from 'diagnostic-data';
 import { DirectionalHint } from 'office-ui-fabric-react';
-import { ITooltipOptions } from '@angular-react/fabric';
 
 const crashMonitoringDetectorName: string = "crashmonitoring";
 
@@ -45,7 +44,7 @@ export class CrashMonitoringAnalysisComponent implements OnInit, OnChanges, OnDe
   directionalHint = DirectionalHint.rightTopEdge;
   toolTipStyles = { 'backgroundColor': 'black', 'color': 'white', 'border': '0px' };
 
-  toolTipOptionsValue: ITooltipOptions = {
+  toolTipOptionsValue: any = {
     calloutProps: {
       styles: {
         beak: this.toolTipStyles,
