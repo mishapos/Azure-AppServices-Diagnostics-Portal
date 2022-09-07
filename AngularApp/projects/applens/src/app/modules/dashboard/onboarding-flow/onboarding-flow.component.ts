@@ -329,7 +329,6 @@ export class OnboardingFlowComponent implements OnInit {
 
   codeOnDefaultBranch: boolean = false;
   searchTermDialogHidden: boolean = true;
-  npmRcContent: string = "# Auto generated file from Gardener Plugin CentralFeedServiceAdoptionPlugin\nregistry=https://pkgs.dev.azure.com/msazure/one/_packaging/one_PublicPackages/npm/registry/ \nalways-auth=true";
 
   constructor(private cdRef: ChangeDetectorRef, private githubService: GithubApiService, private detectorGistApiService: DetectorGistApiService,
     private diagnosticApiService: ApplensDiagnosticService, private _diagnosticApi: DiagnosticApiService, private resourceService: ResourceService,
@@ -1456,11 +1455,6 @@ export class OnboardingFlowComponent implements OnInit {
       `/${this.publishingPackage.id.toLowerCase()}/package.json`
     ];
 
-    if (commitType == 'add') {
-      gradPublishFiles.push(this.publishingPackage.npmRCFile);
-      gradPublishFileTitles.push(`/${this.publishingPackage.id.toLowerCase()}/.npmrc`);
-    }
-
     let reviewers = "";
 
     if(Object.keys(this.DevopsConfig.appTypeReviewers).length > 0 || Object.keys(this.DevopsConfig.platformReviewers).length > 0){
@@ -1532,19 +1526,6 @@ export class OnboardingFlowComponent implements OnInit {
       gradPublishFileTitles.push(`/${this.id.toLowerCase()}/owners.txt`);
     }
 
-    // check if .npmrc file exists before deleting it 
-    let npmRcExists: boolean = false;
-    this.diagnosticApiService.getDetectorCode(`/${this.id.toLowerCase()}/.npmrc`, requestBranch, this.resourceId).subscribe( s => {
-      npmRcExists = true;
-    }, err => {
-      npmRcExists = false;
-    });
-
-    if (npmRcExists) {
-      gradPublishFiles.push("Delete npmrc");
-      gradPublishFileTitles.push(`/${this.id.toLowerCase()}/.npmrc`);
-    }
-
     var requestBranch = this.Branch;
     if (this.useAutoMergeText) {
       requestBranch = this.defaultBranch;
@@ -1604,11 +1585,6 @@ export class OnboardingFlowComponent implements OnInit {
       `/${this.publishingPackage.id.toLowerCase()}/metadata.json`,
       `/${this.publishingPackage.id.toLowerCase()}/package.json`
     ];
-
-    if (commitType == 'add') {
-      gradPublishFiles.push(this.publishingPackage.npmRCFile);
-      gradPublishFileTitles.push(`/${this.publishingPackage.id.toLowerCase()}/.npmrc`);
-    }
 
     let reviewers = "";
 
@@ -1763,8 +1739,7 @@ export class OnboardingFlowComponent implements OnInit {
         dllBytes: this.compilationPackage.assemblyBytes,
         pdbBytes: this.compilationPackage.pdbBytes,
         packageConfig: JSON.stringify(this.configuration),
-        metadata: JSON.stringify({ "utterances": this.allUtterances }),
-        npmRCFile : this.npmRcContent
+        metadata: JSON.stringify({ "utterances": this.allUtterances })
       };
     });
   }

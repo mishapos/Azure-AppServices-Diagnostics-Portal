@@ -7,7 +7,6 @@ export interface Package {
   dllBytes: string;
   pdbBytes: string;
   metadata: string;
-  npmRCFile: string;
 }
 
 export interface Dependency {
