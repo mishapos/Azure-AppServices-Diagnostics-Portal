@@ -4,6 +4,11 @@ export class NetworkTroubleshooterPostAPIBody {
     ResourceMetadata: ResourceMetadata;
 }
 
+export class NetworkTroubleshooterPostTcpPingBody {
+    Host: string;
+    Port: number;
+}
+
 export class Credentials {
     CredentialType: string;
     CredentialReference: CredentialReference;

@@ -3,7 +3,7 @@ import { Globals } from 'projects/app-service-diagnostics/src/app/globals';
 import { stringify } from 'querystring';
 import { ResponseMessageEnvelope } from '../../../models/responsemessageenvelope';
 import { Site, SiteInfoMetaData } from '../../../models/site';
-import { NetworkTroubleshooterPostAPIBody, Credentials, CredentialReference, ResourceMetadata } from '../../../models/network-troubleshooter/post-request-body'
+import { NetworkTroubleshooterPostAPIBody, Credentials, CredentialReference, ResourceMetadata, NetworkTroubleshooterPostTcpPingBody } from '../../../models/network-troubleshooter/post-request-body'
 import { ArmService } from '../../../services/arm.service';
 import { SiteService } from '../../../services/site.service';
 
@@ -128,8 +128,8 @@ export class DiagProvider {
     public async postNetworkTroubleshooterApiAsync(api: string, body: any, timeoutInSec: number = 15): Promise<any> {
         var params = "api-version=2015-08-01";
         //TODO: Temporary switch to calling SCM - revert to calling ARM once ARM manifest is updated
-        //var prefix = `management.azure.com/${this._siteInfo.resourceUri}/NetworkValidationChecker`;
-        var prefix = `${this.scmHostName}/NetworkValidationChecker`;
+        var prefix = `management.azure.com/${this._siteInfo.resourceUri}`;
+        //var prefix = `${this.scmHostName}/NetworkValidationChecker`;
         var stack = new Error("error_message_placeholder").stack;
         var promise = this._armService.post(`https://${prefix}/${api}?${params}`, body)
             .toPromise()
@@ -154,7 +154,7 @@ export class DiagProvider {
         requestBody.ResourceMetadata = new ResourceMetadata();
         requestBody.ResourceMetadata.EntityName = entityName;
 
-        var response: any = await this.postNetworkTroubleshooterApiAsync("ConnectivityCheck", requestBody, timeoutInSec);
+        var response: any = await this.postNetworkTroubleshooterApiAsync("connectivityCheck", requestBody, timeoutInSec);
         if (response == null || response.statusText == null)
         {
           throw Error("No response received when calling the network troubleshooter endpoint via postNetworkTroubleshooterApiAsync().");
@@ -265,6 +265,54 @@ export class DiagProvider {
             e.stack = stack.replace("error_message_placeholder", e.message || "");
             throw e;
         });
+    }
+
+    public async tcpPingNetworkTroubleshooterAsync(hostname: string, port: number, count: number = 1, timeout: number = 10, instance?: string): Promise<{ status: ConnectionCheckStatus, statuses: ConnectionCheckStatus[] }> {
+        var requestBody = new NetworkTroubleshooterPostTcpPingBody();
+        requestBody.Host = hostname;
+        requestBody.Port = port;
+        var response: any = await this.postNetworkTroubleshooterApiAsync("TcppingCheck", requestBody, timeout);
+        if (response == null)
+        {
+          throw Error("No response received when calling the Network Troubleshooter for tcpPingNetworkTroubleshooterAsync().");
+        }
+        else if ( response.connectionStatus == null || response.connectionStatusDetails == null) {
+            throw Error("Invalid response when calling Network Troublershooter TcpPing endpoint. Status or Details null");
+        }
+        else 
+        {
+            var responseConnectionStatus = response.ConnectionStatus;
+            var status: ConnectionCheckStatus;
+            if (responseConnectionStatus.equals("Success")) 
+            {
+                status = ConnectionCheckStatus.success;
+            }
+            // TODO : determing how to respond to other results here . 
+            var statuses: ConnectionCheckStatus[] = [];
+            var responseConnectionstatusDetails = response.connectionStatusDetails;
+            var splited = responseConnectionstatusDetails.split("\r\n");
+            for (var i in splited) {
+                var line = splited[i];
+                if (line.startsWith("Connected to ")) {
+                    statuses.push(ConnectionCheckStatus.success);
+                } else if (line.includes("No such host is known")) {
+                    statuses.push(ConnectionCheckStatus.hostNotFound);
+                } else if (line.includes("Connection timed out")) {
+                    statuses.push(ConnectionCheckStatus.timeout);
+                } else if (line.startsWith("Connection attempt failed: An attempt was made to access a socket")) {
+                    statuses.push(ConnectionCheckStatus.blocked);
+                } else if (line.startsWith("Complete")) {
+                    break;
+                } else {
+                    throw new Error(`tcpPingAsync: unknown status ${responseConnectionstatusDetails}`);
+                }
+            }
+            if (status != ConnectionCheckStatus.success) 
+            {
+                status = statuses.some(s => s == ConnectionCheckStatus.success) ? ConnectionCheckStatus.success : statuses[0];
+            }
+            return { status, statuses };
+        }
     }
 
     public async nameResolveAsync(hostname: string, dns: string, instance?: string): Promise<{ ip: string, aliases: string }> {
