@@ -331,8 +331,6 @@ export class OnboardingFlowComponent implements OnInit {
   owners: string[] = [];
 
   codeOnDefaultBranch: boolean = false;
-  searchTermDialogHidden: boolean = true;
-
   constructor(private cdRef: ChangeDetectorRef, private githubService: GithubApiService, private detectorGistApiService: DetectorGistApiService,
     private diagnosticApiService: ApplensDiagnosticService, private _diagnosticApi: DiagnosticApiService, private resourceService: ResourceService,
     private _detectorControlService: DetectorControlService, private _adalService: AdalService,
@@ -446,7 +444,6 @@ export class OnboardingFlowComponent implements OnInit {
   ableToDelete: boolean = false;
   deleteVisibilityStyle = {};
   commitHistoryVisibilityStyle = {};
-  searchTermVisibilityStyle = {};
   commitHistoryLink: string = "";
 
   isProd: boolean = false;
@@ -466,7 +463,6 @@ export class OnboardingFlowComponent implements OnInit {
       this.deleteVisibilityStyle = !(this.detectorGraduation === true && this.mode !== DevelopMode.Create) ? { display: "none" } : {};
       this.saveButtonVisibilityStyle = !(this.detectorGraduation === true ) ? { display: "none" } : {};
       this.commitHistoryVisibilityStyle = !(this.detectorGraduation === true && this.mode !== DevelopMode.Create) ? { display: "none" } : {};
-      this.searchTermVisibilityStyle = !this.detectorGraduation ? {display : "none"} : {};
 
       this.modalPublishingButtonText = this.detectorGraduation && !devopsConfig.autoMerge ? "Create PR" : "Publish";
 
@@ -1977,17 +1973,5 @@ export class OnboardingFlowComponent implements OnInit {
       },
       queryParamsHandling: 'merge'
     })
-  }
-
-  showSearchTermsDialog() {
-  this.searchTermDialogHidden  = false;
-  }
-
-  dismissSearchDialog() {
-    this.searchTermDialogHidden = true;
-  }
-  saveSearchTerms() {
-    this.prepareMetadata();
-    this.searchTermDialogHidden = true;
   }
 }
