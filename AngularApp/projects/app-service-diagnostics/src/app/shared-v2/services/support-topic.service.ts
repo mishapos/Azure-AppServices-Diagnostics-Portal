@@ -227,7 +227,9 @@ export class SupportTopicService {
                         let fakeStartTimeString = startTime.format('YYYY-MM-DD HH:mm');
                         let fakeEndTimeString = endTime.format('YYYY-MM-DD HH:mm');
 
-                        return this._diagnosticService.getDetector(keystoneDetectorId, fakeStartTimeString, fakeEndTimeString, false, false, "&extractKeywords=true").pipe(map(keystoneRes => {
+                        let formQueryParmas  ="&extractKeywords=true";
+                        if(searchTerm) formQueryParmas = formQueryParmas + `&searchTerm=${searchTerm}`;
+                        return this._diagnosticService.getDetector(keystoneDetectorId, fakeStartTimeString, fakeEndTimeString, false, false, formQueryParmas).pipe(map(keystoneRes => {
                             if (keystoneRes != undefined) {
                                 let keystoneData = keystoneRes.dataset.find((data) => data.renderingProperties.type === RenderingType.KeystoneComponent);
                                 let keystoneInsight: KeystoneInsight = JSON.parse(keystoneData.table.rows[0][0]);
