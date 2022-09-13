@@ -402,7 +402,7 @@ async function runConnectivityCheckAsync(hostname, port, dnsServers, diagProvide
     })();
 
     //TODO: Perform tcpping validation through NetworkValidationChecker endpoint instead of kudu
-    var tcpPingPromise = diagProvider.tcpPingAsync(hostname, port).catch(e => {
+    var tcpPingPromise = diagProvider.tcpPingNetworkTroubleshooterAsync(hostname, port).catch(e => {
         logDebugMessage(e);
         return {};
     });
