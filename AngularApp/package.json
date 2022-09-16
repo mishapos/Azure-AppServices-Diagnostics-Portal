@@ -25,12 +25,10 @@
     "bundle-report": "webpack-bundle-analyzer ../Backend/wwwroot/stats.json -p 8889"
   },
   "dependencies": {
-    "@angular/animations": "^10.2.5",
     "@angular/common": "10.2.5",
     "@angular/compiler": "10.2.5",
     "@angular/core": "10.2.5",
     "@angular/forms": "10.2.5",
-    "@angular/platform-browser": "10.2.5",
     "@angular/platform-browser-dynamic": "10.2.5",
     "@angular/router": "10.2.5",
     "@angular/upgrade": "10.2.5",
