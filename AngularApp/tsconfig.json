@@ -21,7 +21,7 @@
       ],
       "diagnostic-data": [
         "projects/diagnostic-data/src/public_api",
-        "../projects/diagnostic-data/src/public_api",
+        "../projects/diagnostic-data/src/public_api"
       ]
     },
     "lib": [
