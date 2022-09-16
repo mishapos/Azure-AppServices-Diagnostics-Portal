@@ -59,7 +59,6 @@
     "moment": "^2.22.1",
     "monaco-languageclient": "^0.13.0",
     "ng-in-viewport": "^6.1.0",
-    "ng-pick-datetime": "^7.0.0",
     "ng5-slider": "^1.2.6",
     "ngx-markdown": "^8.2.2",
     "ngx-monaco-editor": "^8.1.1",
