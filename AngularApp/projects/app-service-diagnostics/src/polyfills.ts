@@ -73,6 +73,8 @@ import 'web-animations-js';  // Run `npm install --save web-animations-js`.
  */
 // (window as any).__Zone_enable_cross_context_check = true;
 
+// https://stackoverflow.com/questions/50313745/angular-6-process-is-not-defined-when-trying-to-serve-application
+(window as any).process = { env: { DEBUG: undefined }, };
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */

@@ -10,7 +10,7 @@ import * as momentNs from 'moment';
 import { ChangeAnalysisUtilities } from '../../utilities/changeanalysis-utilities';
 import { DataTableUtilities } from '../../utilities/datatable-utilities';
 import { DataRenderBaseComponent } from '../data-render-base/data-render-base.component';
-import { MatTableDataSource } from '@angular/material/table/table-data-source';
+import { MatTableDataSource } from '@angular/material/table';
 
 const moment = momentNs;
   @Component({
