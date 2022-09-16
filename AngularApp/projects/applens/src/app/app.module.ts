@@ -70,88 +70,88 @@ export class ValidResourceResolver implements Resolve<void>{
 }
 
 export const Routes = RouterModule.forRoot([
-  {
-    path: '',
-    canActivate: [AadAuthGuard],
-    children: [
-      {
+    {
         path: '',
+        canActivate: [AadAuthGuard],
         children: [
-          {
-            path: '',
-            loadChildren: () => import('./modules/main/main.module').then(m => m.MainModule)
-          },
-          {
-            path: 'sites/:site',
-            loadChildren: () => import('./modules/site/site.module').then(m => m.SiteModule)
-          },
-          {
-            path: 'containerapps/:containerapp',
-            loadChildren: () => import('./modules/containerapp/containerapp.module').then(m => m.ContainerAppModule)
-          }, {
-            path: 'staticwebapps/:staticwebapp',
-            loadChildren: () => import('./modules/staticwebapp/staticwebapp.module').then(m => m.StaticWebAppModule)
-          },
-          {
-            path: 'stampfinder/:stampName',
-            loadChildren: () => import('./modules/stamp/stamp.module').then(m => m.StampModule)
-          },
-          {
-            path: 'icm',
-            loadChildren: () => import('./modules/incidentassist/incidentassist.module').then(m => m.IncidentAssistModule)
-          },
-          {
-            path: 'surveys/:caseId',
-            loadChildren: () => import('./modules/surveys/surveys.module').then(m => m.SurveysModule)
-          },
-          {
-            path: 'hostingEnvironments/:hostingEnvironment',
-            loadChildren: () => import('./modules/ase/ase.module').then(m => m.AseModule)
-          },
-          {
-            path: 'subscriptions/:subscriptionId/resourceGroups/:resourceGroup/:resourceTypeName/:resourceName',
-            redirectTo: 'subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Web/:resourceTypeName/:resourceName'
-          },
-          {
-            path: 'subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/:provider/:resourceTypeName/:resourceName',
-            loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule),
-            resolve: { validResources: ValidResourceResolver }
-          },
-          //For '/resourceGroup' case insensitive
-          {
-            path: 'subscriptions/:subscriptionId/resourcegroups/:resourceGroup/providers/:provider/:resourceTypeName/:resourceName',
-            redirectTo: 'subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/:provider/:resourceTypeName/:resourceName',
-          },
-          {
-            path: 'stamps/:stampName',
-            loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule),
-            resolve: { validResources: ValidResourceResolver }
-          },
-          {
-            path: 'caseCleansing',
-            loadChildren: () => import('./modules/casecleansing/casecleansing.module').then(m => m.CasecleansingModule)
-          }
+            {
+                path: '',
+                children: [
+                    {
+                        path: '',
+                        loadChildren: () => import('./modules/main/main.module').then(m => m.MainModule)
+                    },
+                    {
+                        path: 'sites/:site',
+                        loadChildren: () => import('./modules/site/site.module').then(m => m.SiteModule)
+                    },
+                    {
+                        path: 'containerapps/:containerapp',
+                        loadChildren: () => import('./modules/containerapp/containerapp.module').then(m => m.ContainerAppModule)
+                    }, {
+                        path: 'staticwebapps/:staticwebapp',
+                        loadChildren: () => import('./modules/staticwebapp/staticwebapp.module').then(m => m.StaticWebAppModule)
+                    },
+                    {
+                        path: 'stampfinder/:stampName',
+                        loadChildren: () => import('./modules/stamp/stamp.module').then(m => m.StampModule)
+                    },
+                    {
+                        path: 'icm',
+                        loadChildren: () => import('./modules/incidentassist/incidentassist.module').then(m => m.IncidentAssistModule)
+                    },
+                    {
+                        path: 'surveys/:caseId',
+                        loadChildren: () => import('./modules/surveys/surveys.module').then(m => m.SurveysModule)
+                    },
+                    {
+                        path: 'hostingEnvironments/:hostingEnvironment',
+                        loadChildren: () => import('./modules/ase/ase.module').then(m => m.AseModule)
+                    },
+                    {
+                        path: 'subscriptions/:subscriptionId/resourceGroups/:resourceGroup/:resourceTypeName/:resourceName',
+                        redirectTo: 'subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Web/:resourceTypeName/:resourceName'
+                    },
+                    {
+                        path: 'subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/:provider/:resourceTypeName/:resourceName',
+                        loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule),
+                        resolve: { validResources: ValidResourceResolver }
+                    },
+                    //For '/resourceGroup' case insensitive
+                    {
+                        path: 'subscriptions/:subscriptionId/resourcegroups/:resourceGroup/providers/:provider/:resourceTypeName/:resourceName',
+                        redirectTo: 'subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/:provider/:resourceTypeName/:resourceName',
+                    },
+                    {
+                        path: 'stamps/:stampName',
+                        loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule),
+                        resolve: { validResources: ValidResourceResolver }
+                    },
+                    {
+                        path: 'caseCleansing',
+                        loadChildren: () => import('./modules/casecleansing/casecleansing.module').then(m => m.CasecleansingModule)
+                    }
+                ]
+            }
         ]
-      }
-    ]
-  },
-  {
-    path: 'unauthorized',
-    component: UnauthorizedComponent
-  },
-  {
-    path: 'authRequestFailed',
-    component: AuthRequestFailedComponent
-  },
-  {
-    path: 'tokeninvalid',
-    component: TokenInvalidComponent
-  },
-  {
-    path: 'login',
-    component: LoginComponent
-  }
-]);
+    },
+    {
+        path: 'unauthorized',
+        component: UnauthorizedComponent
+    },
+    {
+        path: 'authRequestFailed',
+        component: AuthRequestFailedComponent
+    },
+    {
+        path: 'tokeninvalid',
+        component: TokenInvalidComponent
+    },
+    {
+        path: 'login',
+        component: LoginComponent
+    }
+], { relativeLinkResolution: 'legacy' });
 
 @NgModule({
   declarations: [
