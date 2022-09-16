@@ -39,6 +39,7 @@
     "@angular/router": "8.2.14",
     "@angular/upgrade": "8.2.14",
     "@microsoft/applicationinsights-web": "^2.5.4",
+    "@ng-select/ng-select": "^3.7.3",
     "@types/highcharts": "^7.0.0",
     "@types/react": "~16.8.6",
     "@types/react-dom": "^16.8.6",
