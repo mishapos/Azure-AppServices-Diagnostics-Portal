@@ -20,6 +20,7 @@
     "@angular/core": "8.0.2",
     "@microsoft/applicationinsights-web": "^2.5.4",
     "copy-html-to-clipboard": "^4.0.1",
-    "ngx-monaco-editor": "^6.0.0"
+    "ngx-monaco-editor": "^6.0.0",
+    "tslib": "^2.0.0"
   }
 }
