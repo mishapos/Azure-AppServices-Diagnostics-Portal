@@ -217,7 +217,12 @@
             "tsConfig": "projects/diagnostic-data/tsconfig.lib.json",
             "project": "projects/diagnostic-data/ng-package.json"
           }
-        },
+        ,          "configurations": {
+            "production": {
+              "tsConfig": "projects/diagnostic-data/tsconfig.lib.prod.json"
+            }
+          }
+},
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
@@ -250,6 +255,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "../Backend/wwwroot",
             "index": "projects/app-service-diagnostics/src/index.html",
             "main": "projects/app-service-diagnostics/src/main.ts",
@@ -291,6 +297,12 @@
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "projects/app-service-diagnostics/src/environments/environment.ts",
@@ -308,6 +320,12 @@
               "buildOptimizer": true
             },
             "local": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "projects/app-service-diagnostics/src/environments/environment.ts",
@@ -404,7 +422,7 @@
   "defaultProject": "azure-web-apps-support-center",
   "schematics": {
     "@schematics/angular:component": {
-      "styleext": "scss"
+      "style": "scss"
     },
     "@schematics/angular:directive": {}
   }
