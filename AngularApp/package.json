@@ -25,10 +25,7 @@
     "bundle-report": "webpack-bundle-analyzer ../Backend/wwwroot/stats.json -p 8889"
   },
   "dependencies": {
-    "@angular-react/core": "^1.0.0",
-    "@angular-react/fabric": "3.0.0",
     "@angular/animations": "^9.1.13",
-    "@angular/cdk": "^8.2.3",
     "@angular/common": "9.1.13",
     "@angular/compiler": "9.1.13",
     "@angular/core": "9.1.13",
@@ -39,7 +36,6 @@
     "@angular/router": "9.1.13",
     "@angular/upgrade": "9.1.13",
     "@microsoft/applicationinsights-web": "^2.5.4",
-    "@ng-select/ng-select": "^3.7.3",
     "@types/highcharts": "^7.0.0",
     "@types/react": "~16.8.6",
     "@types/react-dom": "^16.8.6",
@@ -61,8 +57,6 @@
     "monaco-languageclient": "^0.13.0",
     "ng-in-viewport": "^6.1.0",
     "ng5-slider": "^1.2.6",
-    "ngx-avatar": "^3.7.0",
-    "ngx-markdown": "^8.2.2",
     "ngx-monaco-editor": "^8.1.1",
     "ngx-smart-modal": "^6.0.4",
     "node-sass": "^4.14.0",
