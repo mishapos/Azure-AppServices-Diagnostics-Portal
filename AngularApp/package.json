@@ -25,7 +25,7 @@
     "bundle-report": "webpack-bundle-analyzer ../Backend/wwwroot/stats.json -p 8889"
   },
   "dependencies": {
-    "@angular-devkit/core": "^14.2.3",
+    "@angular-devkit/core": "^12.2.17",
     "@angular/common": "10.2.5",
     "@angular/compiler": "10.2.5",
     "@angular/core": "10.2.5",
