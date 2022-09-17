@@ -25,6 +25,7 @@
     "bundle-report": "webpack-bundle-analyzer ../Backend/wwwroot/stats.json -p 8889"
   },
   "dependencies": {
+    "@angular-builders/custom-webpack": "^11.1.1",
     "@angular-devkit/core": "^11.2.19",
     "@angular-react/core": "^4.0.0",
     "@angular-react/fabric": "^4.0.0",
@@ -100,7 +101,7 @@
     "awesome-typescript-loader": "^2.2.1",
     "concurrently": "^4.1.0",
     "jasmine": "^3.0.0",
-    "jasmine-core": "~3.6.0",
+    "jasmine-core": "~3.8.0",
     "karma": "~5.2.0",
     "karma-chrome-launcher": "~3.1.0",
     "karma-cli": "~1.0.1",

@@ -7,7 +7,7 @@ import { FabDialogModule, FabButtonModule, FabTextFieldModule, FabCalloutModule,
 import { DiagnosticDataModule } from 'diagnostic-data';
 import { SharedModule } from '../../shared/shared.module';
 
-export const MainModuleRoutes : ModuleWithProviders = RouterModule.forChild([
+export const MainModuleRoutes : ModuleWithProviders<MainModule> = RouterModule.forChild([
   {
     path: '',
     component: MainComponent
