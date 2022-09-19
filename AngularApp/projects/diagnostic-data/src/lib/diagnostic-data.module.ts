@@ -9,7 +9,7 @@ import { GenieGlobals } from './services/genie.service';
 import { MarkdownModule } from 'ngx-markdown';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
 import { CommonModule } from '@angular/common';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule, SecurityContext } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CardSelectionComponent } from './components/card-selection/card-selection.component';
 import { CommAlertComponent } from './components/comm-alert/comm-alert.component';
@@ -111,7 +111,7 @@ import { InfoStepComponent } from './components/step-views/info-step-view/info-s
 import { DropDownStepComponent, GetDropdownOptionsPipe } from './components/step-views/dropdown-step-view/dropdown-step.component';
 import { CheckStepComponent } from './components/step-views/check-step-view/check-step.component';
 import { CheckComponent, ConvertLevelToHealthStatusPipe } from './components/step-views/check-step-view/check.component';
-import {SolutionOrchestratorComponent} from "./components/solution-orchestrator/solution-orchestrator.component";
+import { SolutionOrchestratorComponent } from "./components/solution-orchestrator/solution-orchestrator.component";
 import { ButtonStepComponent } from './components/step-views/button-step-view/button-step.component';
 import { FabCoachmarkModule } from './modules/fab-coachmark/coachmark.module';
 import { FabTeachingBubbleModule } from './modules/fab-teachingbubble/teachingbubble.module';
@@ -129,7 +129,9 @@ import { GenericPortalService } from './services/generic-portal.service';
 @NgModule({
   imports: [
     CommonModule,
-    MarkdownModule.forRoot(),
+    MarkdownModule.forRoot({
+      sanitize: SecurityContext.STYLE
+    }),
     FormsModule,
     MonacoEditorModule.forRoot(),
     CustomMaterialModule,

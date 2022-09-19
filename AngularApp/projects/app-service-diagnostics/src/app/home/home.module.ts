@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, SecurityContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
@@ -674,7 +674,9 @@ export const HomeRoutes = RouterModule.forChild([
         GenieModule,
         FabricModule,
         FormsModule,
-        MarkdownModule.forRoot(),
+        MarkdownModule.forRoot({
+            sanitize: SecurityContext.STYLE
+          }),
         FabSearchBoxModule,
         FabCommandBarModule,
         FabSpinnerModule

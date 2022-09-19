@@ -1,4 +1,4 @@
-import { NgModule, Injectable } from '@angular/core';
+import { NgModule, Injectable, SecurityContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DashboardComponent, FormatResourceNamePipe } from './dashboard/dashboard.component';
@@ -98,7 +98,7 @@ export class InitResolver implements Resolve<Observable<ResourceInfo>>{
             };
             return resourceInfo;
         }), flatMap(resourceInfo => {
-            return this._userSettingService.getUserSetting().pipe(take(1),catchError(_ => of(null)), map(_ => resourceInfo));
+            return this._userSettingService.getUserSetting().pipe(take(1), catchError(_ => of(null)), map(_ => resourceInfo));
         }), flatMap(resourceInfo => {
             return this._userSettingService.updateLandingInfo(recentResource).pipe(catchError(_ => of(null)), map(_ => resourceInfo));
         }));
@@ -162,12 +162,12 @@ export const DashboardModuleRoutes: ModuleWithProviders = RouterModule.forChild(
             {
                 path: 'create',
                 component: OnboardingFlowComponent,
-                canDeactivate:[DevelopNavigationGuardService]
+                canDeactivate: [DevelopNavigationGuardService]
             },
             {
                 path: 'createGist',
                 component: GistComponent,
-                canDeactivate:[DevelopNavigationGuardService]
+                canDeactivate: [DevelopNavigationGuardService]
             },
             {
                 path: 'solutionOrchestrator',
@@ -184,14 +184,14 @@ export const DashboardModuleRoutes: ModuleWithProviders = RouterModule.forChild(
                     {
                         path: '',
                         component: TabGistDevelopComponent,
-                        canDeactivate:[DevelopNavigationGuardService],
+                        canDeactivate: [DevelopNavigationGuardService],
                         data: {
                             tabKey: TabKey.Develop
                         }
                     }, {
                         path: 'edit',
                         redirectTo: '',
-                        canDeactivate:[DevelopNavigationGuardService]
+                        canDeactivate: [DevelopNavigationGuardService]
                     }, {
                         path: 'changelist',
                         component: TabChangelistComponent,
@@ -302,7 +302,7 @@ export const DashboardModuleRoutes: ModuleWithProviders = RouterModule.forChild(
                     {
                         path: 'edit',
                         component: TabDevelopComponent,
-                        canDeactivate:[DevelopNavigationGuardService],
+                        canDeactivate: [DevelopNavigationGuardService],
                         data: {
                             tabKey: TabKey.Develop
                         }
@@ -405,7 +405,9 @@ export const DashboardModuleRoutes: ModuleWithProviders = RouterModule.forChild(
         CollapsibleMenuModule,
         NgxSmartModalModule.forRoot(),
         NgSelectModule,
-        MarkdownModule.forRoot(),
+        MarkdownModule.forRoot({
+            sanitize: SecurityContext.STYLE
+        }),
         HighchartsChartModule,
         FabSpinnerModule,
         FabPanelModule,
