@@ -26,7 +26,6 @@ import { ApplensCommsService } from './services/applens-comms.service';
 import { ApplensSupportTopicService } from './services/applens-support-topic.service';
 import { ApplensContentService } from './services/applens-content.service';
 import { DiagnosticService, DiagnosticDataModule, CommsService, DetectorControlService, GenericSupportTopicService, GenericContentService, GenericDocumentsSearchService, GenieGlobals, SolutionOrchestratorComponent, TimePickerOptions, GenericBreadcrumbService, GenericUserSettingService } from 'diagnostic-data';
-import { FabBreadcrumbModule, FabButtonModule, FabCalendarComponent, FabCalendarModule, FabCalloutModule, FabCheckboxModule, FabChoiceGroupModule, FabCommandBarModule, FabDatePickerModule, FabDetailsListModule, FabDialogModule, FabDropdownModule, FabIconModule, FabPanelModule, FabPivotModule, FabSearchBoxModule, FabTextFieldModule, FabSpinnerModule, FabMessageBarModule } from '@angular-react/fabric';
 import { CollapsibleMenuModule } from '../../collapsible-menu/collapsible-menu.module';
 import { ObserverService } from '../../shared/services/observer.service';
 import { TabDataSourcesComponent } from './tabs/tab-data-sources/tab-data-sources.component';
@@ -71,6 +70,24 @@ import { BreadcrumbService } from './services/breadcrumb.service';
 import { FavoriteDetectorsComponent } from './favoite-detectors/favorite-detectors.component';
 import { ApplensDocSectionComponent } from './applens-doc-section/applens-doc-section.component';
 import { DevelopNavigationGuardService } from './develop-navigation-guard.service';
+import { FabSpinnerModule } from '@angular-react/fabric/lib/components/spinner';
+import { FabPanelModule } from '@angular-react/fabric/lib/components/panel';
+import { FabCommandBarModule } from '@angular-react/fabric/lib/components/command-bar';
+import { FabIconModule } from '@angular-react/fabric/lib/components/icon';
+import { FabTextFieldModule } from '@angular-react/fabric/lib/components/text-field';
+import { FabSearchBoxModule } from '@angular-react/fabric/lib/components/search-box';
+import { FabDetailsListModule } from '@angular-react/fabric/lib/components/details-list';
+import { FabDialogModule } from '@angular-react/fabric/lib/components/dialog';
+import { FabButtonModule } from '@angular-react/fabric/lib/components/button';
+import { FabCalloutModule } from '@angular-react/fabric/lib/components/callout';
+import { FabCheckboxModule } from '@angular-react/fabric/lib/components/checkbox';
+import { FabChoiceGroupModule } from '@angular-react/fabric/lib/components/choice-group';
+import { FabPivotModule } from '@angular-react/fabric/lib/components/pivot';
+import { FabDatePickerModule } from '@angular-react/fabric/lib/components/date-picker';
+import { FabCalendarModule } from '@angular-react/fabric/lib/components/calendar';
+import { FabDropdownModule } from '@angular-react/fabric/lib/components/dropdown';
+import { FabBreadcrumbModule } from '@angular-react/fabric/lib/components/breadcrumb';
+import { FabMessageBarModule } from '@angular-react/fabric/lib/components/message-bar';
 
 @Injectable()
 export class InitResolver implements Resolve<Observable<ResourceInfo>>{

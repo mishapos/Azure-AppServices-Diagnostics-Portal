@@ -22,8 +22,11 @@ import { TokenInvalidComponent } from './shared/components/tokeninvalid/tokeninv
 import { AngularReactBrowserModule } from '@angular-react/core';
 import { ApplensAppinsightsTelemetryService } from './shared/services/applens-appinsights-telemetry.service';
 import { ApplensThemeService } from './shared/services/applens-theme.service';
-import { FabButtonModule, FabDialogModule, FabPanelModule, FabChoiceGroupModule } from '@angular-react/fabric';
 import { AppLensInterceptorService } from './shared/services/applens-http-interceptor.service';
+import { FabPanelModule } from '@angular-react/fabric/lib/components/panel';
+import { FabDialogModule } from '@angular-react/fabric/lib/components/dialog';
+import { FabButtonModule } from '@angular-react/fabric/lib/components/button';
+import { FabChoiceGroupModule } from '@angular-react/fabric/lib/components/choice-group';
 
 @Injectable()
 export class ValidResourceResolver implements Resolve<void>{
