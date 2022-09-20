@@ -21,13 +21,19 @@ import { CaseCleansingApiService } from './services/casecleansing-api.service';
 import { ApplensBannerComponent } from './applens-banner/applens-preview-banner.component';
 import { ApplensHeaderComponent } from './components/applens-header/applens-header.component';
 import { ApplensDiagnosticService } from '../modules/dashboard/services/applens-diagnostic.service';
-import { FabButtonModule, FabCalloutModule, FabDialogModule, FabPanelModule, FabToggleModule, FabSearchBoxModule, FabChoiceGroupModule} from '@angular-react/fabric';
 import { L1SideNavComponent } from './components/l1-side-nav/l1-side-nav.component';
 import { UserSettingService } from '../modules/dashboard/services/user-setting.service';
 import { StaticWebAppService } from './services/staticwebapp.service';
 import { StampService } from './services/stamp.service';
 import { DetectorGistApiService } from './services/detectorgist-template-api.service';
 import { AlertService } from './services/alert.service';
+import { FabPanelModule } from '@angular-react/fabric/lib/components/panel';
+import { FabDialogModule } from '@angular-react/fabric/lib/components/dialog';
+import { FabButtonModule } from '@angular-react/fabric/lib/components/button';
+import { FabSearchBoxModule } from '@angular-react/fabric/lib/components/search-box';
+import { FabCalloutModule } from '@angular-react/fabric/lib/components/callout';
+import { FabToggleModule } from '@angular-react/fabric/lib/components/toggle';
+import { FabChoiceGroupModule } from '@angular-react/fabric/lib/components/choice-group';
 
 @NgModule({
   imports: [

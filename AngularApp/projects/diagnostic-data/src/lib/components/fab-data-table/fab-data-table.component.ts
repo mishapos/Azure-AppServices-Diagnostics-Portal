@@ -1,10 +1,11 @@
-import { FabDetailsListComponent, FabSearchBoxComponent } from '@angular-react/fabric';
 import { AfterContentInit, Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { DetailsListLayoutMode, IColumn, IListProps, ISelection, SelectionMode, Selection } from 'office-ui-fabric-react';
 import { BehaviorSubject } from 'rxjs';
 import { DataTableResponseObject } from '../../models/detector';
 import { TableColumnOption, TableFilter, TableFilterSelectionOption } from '../../models/data-table';
 import { TelemetryService } from '../../services/telemetry/telemetry.service';
+import { FabDetailsListComponent } from '@angular-react/fabric/lib/components/details-list';
+import { FabSearchBoxComponent } from '@angular-react/fabric/lib/components/search-box';
 
 
 const columnMinWidth: number = 100;

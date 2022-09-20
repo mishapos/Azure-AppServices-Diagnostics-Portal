@@ -77,7 +77,6 @@ import { DetectorListAnalysisComponent } from './components/detector-list-analys
 import { AppDependenciesComponent } from './components/app-dependencies/app-dependencies.component';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { HighchartsGraphComponent } from './components/highcharts-graph/highcharts-graph.component';
-import { FabPanelModule, FabIconModule, FabChoiceGroupModule, FabSearchBoxModule, FabDropdownModule, FabDetailsListModule, FabTextFieldModule, FabMessageBarModule, FabButtonModule, FabTooltipModule, FabSpinnerModule, FabCalloutModule, FabCheckboxModule, FabPivotModule, FabLinkModule, FabDatePickerModule, FabCalendarModule, FabCommandBarModule, FabBreadcrumbModule } from '@angular-react/fabric';
 import { SummaryCardsComponent } from './components/summary-cards/summary-cards.component';
 import { InsightsV4Component } from './components/insights-v4/insights-v4.component';
 import { CardSelectionV4Component } from './components/card-selection-v4/card-selection-v4.component';
@@ -125,6 +124,26 @@ import { FabricFeedbackComponent } from './components/fabric-feedback/fabric-fee
 import { GenericBreadcrumbService } from './services/generic-breadcrumb.service';
 import { GenericUserSettingService } from './services/generic-user-setting.service';
 import { GenericPortalService } from './services/generic-portal.service';
+
+import { FabIconModule } from '@angular-react/fabric/lib/components/icon';
+import { FabButtonModule } from '@angular-react/fabric/lib/components/button';
+import { FabDropdownModule } from '@angular-react/fabric/lib/components/dropdown';
+import { FabPanelModule } from '@angular-react/fabric/lib/components/panel';
+import { FabCommandBarModule } from '@angular-react/fabric/lib/components/command-bar';
+import { FabBreadcrumbModule } from '@angular-react/fabric/lib/components/breadcrumb';
+import { FabCalloutModule } from '@angular-react/fabric/lib/components/callout';
+import { FabCheckboxModule } from '@angular-react/fabric/lib/components/checkbox';
+import { FabChoiceGroupModule } from '@angular-react/fabric/lib/components/choice-group';
+import { FabDatePickerModule } from '@angular-react/fabric/lib/components/date-picker';
+import { FabSpinnerModule } from '@angular-react/fabric/lib/components/spinner';
+import { FabPivotModule } from '@angular-react/fabric/lib/components/pivot';
+import { FabLinkModule } from '@angular-react/fabric/lib/components/link';
+import { FabMessageBarModule } from '@angular-react/fabric/lib/components/message-bar';
+import { FabTooltipModule } from '@angular-react/fabric/lib/components/tooltip';
+import { FabSearchBoxModule } from '@angular-react/fabric/lib/components/search-box';
+import { FabCalendarModule } from '@angular-react/fabric/lib/components/calendar';
+import { FabDetailsListModule } from '@angular-react/fabric/lib/components/details-list';
+import { FabTextFieldModule } from '@angular-react/fabric/lib/components/text-field';
 
 @NgModule({
   imports: [
