@@ -11,7 +11,7 @@
     </ng-container>
   </div>
   <div class="filter-callout-footer callout-padding">
-    <fab-primary-button (onClick)="updateTableWithOptions()" (keyup.enter)="updateTableWithOptions()" [ariaLabel]="'Apply'" contentClass="mr-3 callout-button" contentStyle="border-radius: 2px;">Apply
+    <fab-primary-button (onClick)="updateTableWithOptions()" (keyup.enter)="updateTableWithOptions()" [ariaLabel]="'Apply'" [contentClass]="'mr-3 callout-button'" contentStyle="border-radius: 2px;">Apply
     </fab-primary-button>
     <fab-default-button (onClick)="closeCallout()" (keyup.enter)="closeCallout()" [ariaLabel]="'Cancel'" contentStyle="border-radius: 2px;">Cancel</fab-default-button>
   </div>
