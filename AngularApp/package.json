@@ -21,7 +21,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "lib": "ng build diagnostic-data --watch",
-    "generate-report": "ng build app-service-diagnostics --prod",
+    "generate-report": "node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build app-service-diagnostics --stats-json --prod",
     "bundle-report": "webpack-bundle-analyzer ../Backend/wwwroot/stats.json -p 8889"
   },
   "dependencies": {
