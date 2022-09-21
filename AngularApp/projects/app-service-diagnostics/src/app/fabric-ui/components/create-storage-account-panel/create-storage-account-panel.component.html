@@ -60,7 +60,7 @@
 
     <div class="footer">
       <hr style="margin-bottom: 20px;">
-      <fab-primary-button contentStyle="margin-left:10px;margin-right:10px" (click)="saveChanges()">
+      <fab-primary-button [contentStyle]="'margin-left:10px;margin-right:10px'" (click)="saveChanges()">
         Save
       </fab-primary-button>
       <fab-default-button (click)="dismissedHandler()">

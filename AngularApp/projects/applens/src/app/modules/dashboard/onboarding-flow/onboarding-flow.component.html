@@ -215,7 +215,7 @@
            </div>
           </div>
           <div>
-            <fab-action-button contentStyle="padding-top: 27px;" type="button" [disabled]="refreshGistButtonDisabled" [iconProps]="refreshGistListButtonIcon" (click)="updateGistVersionOptions(pastGistEvent)">
+            <fab-action-button [contentStyle]="'padding-top: 27px;'" type="button" [disabled]="refreshGistButtonDisabled" [iconProps]="refreshGistListButtonIcon" (click)="updateGistVersionOptions(pastGistEvent)">
               Refresh gist version list
               </fab-action-button>
           </div>
@@ -351,11 +351,11 @@
                     </div>
                     <div style="border-top: 1px solid gray;" class="pt-3 pb-3 callout-padding">
                       <fab-primary-button (onClick)="updateBranch()" (keyup.enter)="updateTableWithOptions()"
-                        [ariaLabel]="'Apply'" [contentClass]="'mr-3 callout-button'" contentStyle="border-radius: 2px;">
+                        [ariaLabel]="'Apply'" [contentClass]="'mr-3 callout-button'" [contentStyle]="'border-radius: 2px;'">
                         Apply
                       </fab-primary-button>
                       <fab-default-button (onClick)="closeCallout()" (keyup.enter)="closeCallout()"
-                        [ariaLabel]="'Cancel'" contentStyle="border-radius: 2px;">Cancel</fab-default-button>
+                        [ariaLabel]="'Cancel'" [contentStyle]="'border-radius: 2px;'">Cancel</fab-default-button>
                     </div>
                   </div>
                 </fab-callout>

@@ -12,6 +12,6 @@
     "projects/app-service-diagnostics/src/**/*.d.ts"
   ],
   "angularCompilerOptions": {
-    "enableIvy": false
+    "enableIvy": true
   }
 }
