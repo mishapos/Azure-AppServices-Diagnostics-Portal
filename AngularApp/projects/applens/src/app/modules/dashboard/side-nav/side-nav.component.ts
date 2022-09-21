@@ -124,6 +124,19 @@ export class SideNavComponent implements OnInit {
         return this.currentRoutePath && this.currentRoutePath.join('/').toLowerCase() === `createGist`.toLowerCase();
       },
       icon: null
+    },
+    {
+      label: 'New Workflow',
+      id: "",
+      onClick: () => {
+        this.navigateTo('createWorkflow');
+      },
+      expanded: false,
+      subItems: null,
+      isSelected: () => {
+        return this.currentRoutePath && this.currentRoutePath.join('/').toLowerCase() === `createWorkflow`.toLowerCase();
+      },
+      icon: null
     }
   ];
 

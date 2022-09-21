@@ -85,7 +85,7 @@
                 }
               ]
             },
-            "nationalcloud-production":{
+            "nationalcloud-production": {
               "fileReplacements": [
                 {
                   "replace": "projects/applens/src/environments/environment.ts",
@@ -106,7 +106,7 @@
               "vendorChunk": false,
               "buildOptimizer": true
             },
-            "nationalcloud-local":{
+            "nationalcloud-local": {
               "fileReplacements": [
                 {
                   "replace": "projects/applens/src/environments/environment.ts",
@@ -218,13 +218,13 @@
           "options": {
             "tsConfig": "projects/diagnostic-data/tsconfig.lib.json",
             "project": "projects/diagnostic-data/ng-package.json"
-          }
-        ,          "configurations": {
+          },
+          "configurations": {
             "production": {
               "tsConfig": "projects/diagnostic-data/tsconfig.lib.prod.json"
             }
           }
-},
+        },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
@@ -412,6 +412,46 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "projects/app-service-diagnostics-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "ng-flowchart": {
+      "projectType": "library",
+      "root": "projects/ng-flowchart",
+      "sourceRoot": "projects/ng-flowchart/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/ng-flowchart/tsconfig.lib.json",
+            "project": "projects/ng-flowchart/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ng-flowchart/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ng-flowchart/src/test.ts",
+            "tsConfig": "projects/ng-flowchart/tsconfig.spec.json",
+            "karmaConfig": "projects/ng-flowchart/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ng-flowchart/tsconfig.lib.json",
+              "projects/ng-flowchart/tsconfig.spec.json"
+            ],
             "exclude": [
               "**/node_modules/**"
             ]

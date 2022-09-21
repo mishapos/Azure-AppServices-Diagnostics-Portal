@@ -88,6 +88,8 @@ import { FabCalendarModule } from '@angular-react/fabric/lib/components/calendar
 import { FabDropdownModule } from '@angular-react/fabric/lib/components/dropdown';
 import { FabBreadcrumbModule } from '@angular-react/fabric/lib/components/breadcrumb';
 import { FabMessageBarModule } from '@angular-react/fabric/lib/components/message-bar';
+import { CreateWorkflowComponent } from './workflow/create-workflow/create-workflow.component';
+import { NgFlowchartModule } from 'projects/ng-flowchart/dist';
 
 @Injectable()
 export class InitResolver implements Resolve<Observable<ResourceInfo>>{
@@ -184,6 +186,11 @@ export const DashboardModuleRoutes: ModuleWithProviders = RouterModule.forChild(
             {
                 path: 'createGist',
                 component: GistComponent,
+                canDeactivate: [DevelopNavigationGuardService]
+            },
+            {
+                path: 'createWorkflow',
+                component: CreateWorkflowComponent,
                 canDeactivate: [DevelopNavigationGuardService]
             },
             {
@@ -444,7 +451,8 @@ export const DashboardModuleRoutes: ModuleWithProviders = RouterModule.forChild(
         FabCalendarModule,
         FabDropdownModule,
         FabBreadcrumbModule,
-        FabMessageBarModule
+        FabMessageBarModule,
+        NgFlowchartModule
     ],
     providers: [
         ApplensDiagnosticService,
@@ -477,6 +485,7 @@ export const DashboardModuleRoutes: ModuleWithProviders = RouterModule.forChild(
         SearchMenuPipe, TabDataComponent, TabDevelopComponent, TabCommonComponent, TabDataSourcesComponent, TabMonitoringComponent,
         TabMonitoringDevelopComponent, TabAnalyticsDevelopComponent, TabAnalyticsDashboardComponent, GistComponent, TabGistCommonComponent,
         TabGistDevelopComponent, TabChangelistComponent, GistChangelistComponent, TabAnalysisComponent, CategoryPageComponent, SupportTopicPageComponent,
-        SelfHelpContentComponent, UserDetectorsComponent, FormatResourceNamePipe, Sort, SearchResultsComponent, ConfigurationComponent, DashboardContainerComponent, L2SideNavComponent, UserActivePullrequestsComponent, FavoriteDetectorsComponent, ApplensDocsComponent, ApplensDocSectionComponent]
+        SelfHelpContentComponent, UserDetectorsComponent, FormatResourceNamePipe, Sort, SearchResultsComponent, ConfigurationComponent, DashboardContainerComponent,
+        L2SideNavComponent, UserActivePullrequestsComponent, FavoriteDetectorsComponent, ApplensDocsComponent, ApplensDocSectionComponent,CreateWorkflowComponent]
 })
 export class DashboardModule { }
