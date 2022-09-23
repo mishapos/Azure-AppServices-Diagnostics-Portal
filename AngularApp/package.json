@@ -54,6 +54,7 @@
     "admin-lte": "^2.4.3",
     "angular-split-ng6": "^1.0.0-rc.5",
     "bootstrap": "^3.4.1",
+    "buffer": "^6.0.3",
     "classnames": "^2.3.1",
     "copy-html-to-clipboard": "^4.0.1",
     "core-js": "^3.6.5",
@@ -115,5 +116,19 @@
     "ts-node": "~4.1.0",
     "typescript": "~4.6.4",
     "webpack-bundle-analyzer": "^3.6.0"
+  },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false,
+    "crypto": false,
+    "global": true,
+    "net": false,
+    "tls": false,
+    "process": true,
+    "module": false,
+    "clearImmediate": false,
+    "setImmediate": true,
+    "dispatchEvent": true
   }
 }

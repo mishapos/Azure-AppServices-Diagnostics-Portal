@@ -59,6 +59,8 @@ import 'core-js/es/reflect';  // Run `npm install --save web-animations-js`.
 
 // https://stackoverflow.com/questions/50313745/angular-6-process-is-not-defined-when-trying-to-serve-application
 (window as any).process = { env: { DEBUG: undefined }, };
+// @ts-ignore
+window.Buffer = window.Buffer || require('buffer').Buffer;
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */
