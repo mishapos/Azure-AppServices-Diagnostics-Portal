@@ -40,7 +40,6 @@
     "@angular/upgrade": "12.2.16",
     "@fluentui/react": "^8.47.3",
     "@microsoft/applicationinsights-web": "^2.5.4",
-    "@ng-select/ng-select": "^6.1.0",
     "@types/highcharts": "^7.0.0",
     "@types/react": "~16.8.6",
     "@types/react-dom": "^16.8.6",
