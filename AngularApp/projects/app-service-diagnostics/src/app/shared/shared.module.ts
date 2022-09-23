@@ -282,8 +282,7 @@ import { FabPivotModule } from '@angular-react/fabric/lib/components/pivot';
         GenericAnalysisComponent,
         RiskAlertsNotificationComponent,
         RiskAlertsPanelComponent
-    ],
-    entryComponents: [GenericAnalysisComponent, GenericDetectorComponent]
+    ]
 })
 export class SharedModule {
     static forRoot(): ModuleWithProviders<SharedModule> {

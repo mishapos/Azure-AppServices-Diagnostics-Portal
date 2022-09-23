@@ -48,16 +48,9 @@ import { CheckStepComponent } from '../step-views/check-step-view/check-step.com
 import { ButtonStepComponent } from '../step-views/button-step-view/button-step.component';
 
 @Component({
-  selector: 'dynamic-data',
-  templateUrl: './dynamic-data.component.html',
-  styleUrls: ['./dynamic-data.component.scss'],
-  entryComponents: [
-    TimeSeriesGraphComponent, DataSummaryComponent, EmailComponent,
-    InsightsComponent, TimeSeriesInstanceGraphComponent, DynamicInsightComponent, MarkdownViewComponent,
-    DetectorListComponent, DropdownComponent, CardSelectionComponent, SolutionComponent, GuageControlComponent, FormComponent,
-    ChangeAnalysisOnboardingComponent, ChangesetsViewComponent, AppDependenciesComponent, AppInsightsMarkdownComponent, DetectorListAnalysisComponent, ConnectAppInsightsComponent, DetectorSearchComponent, SummaryCardsComponent, InsightsV4Component, DropdownV4Component, CardSelectionV4Component, DynamicInsightV4Component, DataTableV4Component, KeystoneInsightComponent, NotificationRenderingComponent, FabTabComponent, SectionsComponent,
-    StepViewsRendererComponent, InfoStepComponent, ButtonStepComponent, DropDownStepComponent, CheckStepComponent
-  ]
+    selector: 'dynamic-data',
+    templateUrl: './dynamic-data.component.html',
+    styleUrls: ['./dynamic-data.component.scss']
 })
 export class DynamicDataComponent implements OnInit {
 
