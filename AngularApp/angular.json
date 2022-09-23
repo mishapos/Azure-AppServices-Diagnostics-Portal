@@ -1,7 +1,8 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "defaultCollection": "@angular-eslint/schematics"
   },
   "version": 1,
   "newProjectRoot": "projects",
@@ -162,6 +163,15 @@
               "projects/applens/src/assets"
             ]
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/applens//**/*.ts",
+              "projects/applens//**/*.html"
+            ]
+          }
         }
       }
     },
@@ -185,11 +195,11 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": "projects/applens-e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "projects/applens-e2e//**/*.ts",
+              "projects/applens-e2e//**/*.html"
             ]
           }
         }
@@ -222,14 +232,11 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "projects/diagnostic-data/tsconfig.lib.json",
-              "projects/diagnostic-data/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "projects/diagnostic-data/**/*.ts",
+              "projects/diagnostic-data/**/*.html"
             ]
           }
         }
@@ -363,15 +370,11 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "projects/app-service-diagnostics/tsconfig.app.json",
-              "projects/app-service-diagnostics/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "**/availability/**"
+            "lintFilePatterns": [
+              "projects/app-service-diagnostics//**/*.ts",
+              "projects/app-service-diagnostics//**/*.html"
             ]
           }
         }
@@ -397,11 +400,11 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": "projects/app-service-diagnostics-e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "projects/app-service-diagnostics-e2e//**/*.ts",
+              "projects/app-service-diagnostics-e2e//**/*.html"
             ]
           }
         }
@@ -434,14 +437,11 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "projects/ng-flowchart/tsconfig.lib.json",
-              "projects/ng-flowchart/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "projects/ng-flowchart/**/*.ts",
+              "projects/ng-flowchart/**/*.html"
             ]
           }
         }
