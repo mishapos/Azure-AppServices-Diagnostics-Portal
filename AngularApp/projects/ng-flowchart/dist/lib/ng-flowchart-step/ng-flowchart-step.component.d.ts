@@ -1,7 +1,7 @@
 import { ComponentRef, ElementRef, EventEmitter, TemplateRef } from '@angular/core';
 import { NgFlowchart } from '../model/flow.model';
 import { NgFlowchartCanvasService } from '../ng-flowchart-canvas.service';
-import * as ɵngcc0 from '@angular/core';
+import * as i0 from "@angular/core";
 export declare type AddChildOptions = {
     /** Should the child be added as a sibling to existing children, if false the existing children will be reparented to this new child.
      * Default is true.
@@ -121,8 +121,6 @@ export declare class NgFlowchartStepComponent<T = any> {
     private showTree;
     private findLastSingleChild;
     private setChildren;
-    static ɵfac: ɵngcc0.ɵɵFactoryDef<NgFlowchartStepComponent<any>, never>;
-    static ɵcmp: ɵngcc0.ɵɵComponentDefWithMeta<NgFlowchartStepComponent<any>, "ng-flowchart-step", never, { "data": "data"; "type": "type"; "canvas": "canvas"; "compRef": "compRef"; "contentTemplate": "contentTemplate"; }, { "viewInit": "viewInit"; }, never, never>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<NgFlowchartStepComponent<any>, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<NgFlowchartStepComponent<any>, "ng-flowchart-step", never, { "data": "data"; "type": "type"; "canvas": "canvas"; "compRef": "compRef"; "contentTemplate": "contentTemplate"; }, { "viewInit": "viewInit"; }, never, never>;
 }
-
-//# sourceMappingURL=ng-flowchart-step.component.d.ts.map

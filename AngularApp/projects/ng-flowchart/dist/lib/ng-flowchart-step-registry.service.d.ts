@@ -1,6 +1,6 @@
 import { TemplateRef, Type } from '@angular/core';
 import { NgFlowchartStepComponent } from './ng-flowchart-step/ng-flowchart-step.component';
-import * as ɵngcc0 from '@angular/core';
+import * as i0 from "@angular/core";
 export declare class NgFlowchartStepRegistry {
     private registry;
     constructor();
@@ -11,7 +11,6 @@ export declare class NgFlowchartStepRegistry {
      */
     registerStep(type: string, step: Type<NgFlowchartStepComponent> | TemplateRef<any>): void;
     getStepImpl(type: string): Type<NgFlowchartStepComponent> | TemplateRef<any> | null;
-    static ɵfac: ɵngcc0.ɵɵFactoryDef<NgFlowchartStepRegistry, never>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<NgFlowchartStepRegistry, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<NgFlowchartStepRegistry>;
 }
-
-//# sourceMappingURL=ng-flowchart-step-registry.service.d.ts.map

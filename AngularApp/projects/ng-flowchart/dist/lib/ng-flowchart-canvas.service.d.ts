@@ -5,7 +5,7 @@ import { CanvasRendererService } from './services/canvas-renderer.service';
 import { DropDataService as DragService } from './services/dropdata.service';
 import { OptionsService } from './services/options.service';
 import { StepManagerService } from './services/step-manager.service';
-import * as ɵngcc0 from '@angular/core';
+import * as i0 from "@angular/core";
 export declare class CanvasFlow {
     rootStep: NgFlowchartStepComponent;
     private _steps;
@@ -53,8 +53,6 @@ export declare class NgFlowchartCanvasService {
     private placeStepAbove;
     private dropError;
     private moveError;
-    static ɵfac: ɵngcc0.ɵɵFactoryDef<NgFlowchartCanvasService, never>;
-    static ɵprov: ɵngcc0.ɵɵInjectableDef<NgFlowchartCanvasService>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<NgFlowchartCanvasService, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<NgFlowchartCanvasService>;
 }
-
-//# sourceMappingURL=ng-flowchart-canvas.service.d.ts.map

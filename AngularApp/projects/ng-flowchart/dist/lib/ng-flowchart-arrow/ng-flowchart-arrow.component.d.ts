@@ -1,5 +1,5 @@
 import { AfterViewInit, ElementRef, OnInit } from '@angular/core';
-import * as ɵngcc0 from '@angular/core';
+import * as i0 from "@angular/core";
 export declare class NgFlowchartArrowComponent implements OnInit, AfterViewInit {
     arrow: ElementRef;
     set position(pos: {
@@ -23,8 +23,6 @@ export declare class NgFlowchartArrowComponent implements OnInit, AfterViewInit 
     hideArrow(): void;
     showArrow(): void;
     private updatePath;
-    static ɵfac: ɵngcc0.ɵɵFactoryDef<NgFlowchartArrowComponent, never>;
-    static ɵcmp: ɵngcc0.ɵɵComponentDefWithMeta<NgFlowchartArrowComponent, "lib-ng-flowchart-arrow", never, { "position": "position"; }, {}, never, never>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<NgFlowchartArrowComponent, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<NgFlowchartArrowComponent, "lib-ng-flowchart-arrow", never, { "position": "position"; }, {}, never, never>;
 }
-
-//# sourceMappingURL=ng-flowchart-arrow.component.d.ts.map

@@ -2,7 +2,7 @@ import { AfterViewInit, ElementRef, OnDestroy, OnInit, ViewContainerRef } from '
 import { NgFlowchart } from './model/flow.model';
 import { NgFlowchartCanvasService } from './ng-flowchart-canvas.service';
 import { OptionsService } from './services/options.service';
-import * as ɵngcc0 from '@angular/core';
+import * as i0 from "@angular/core";
 export declare class NgFlowchartCanvasDirective implements OnInit, OnDestroy, AfterViewInit {
     protected canvasEle: ElementRef<HTMLElement>;
     private viewContainer;
@@ -35,8 +35,6 @@ export declare class NgFlowchartCanvasDirective implements OnInit, OnDestroy, Af
     scaleUp(): void;
     setScale(scaleValue: number): void;
     private adjustWheelScale;
-    static ɵfac: ɵngcc0.ɵɵFactoryDef<NgFlowchartCanvasDirective, never>;
-    static ɵdir: ɵngcc0.ɵɵDirectiveDefWithMeta<NgFlowchartCanvasDirective, "[ngFlowchartCanvas]", never, { "callbacks": "ngFlowchartCallbacks"; "options": "ngFlowchartOptions"; "disabled": "disabled"; }, {}, never>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<NgFlowchartCanvasDirective, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<NgFlowchartCanvasDirective, "[ngFlowchartCanvas]", never, { "callbacks": "ngFlowchartCallbacks"; "options": "ngFlowchartOptions"; "disabled": "disabled"; }, {}, never>;
 }
-
-//# sourceMappingURL=ng-flowchart-canvas.directive.d.ts.map

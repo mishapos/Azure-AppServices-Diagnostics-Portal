@@ -3,7 +3,7 @@ import { NgFlowchart } from '../model/flow.model';
 import { CanvasFlow } from '../ng-flowchart-canvas.service';
 import { NgFlowchartStepComponent } from '../ng-flowchart-step/ng-flowchart-step.component';
 import { OptionsService } from './options.service';
-import * as ɵngcc0 from '@angular/core';
+import * as i0 from "@angular/core";
 export declare type DropProximity = {
     step: NgFlowchartStepComponent;
     position: NgFlowchart.DropPosition;
@@ -40,8 +40,6 @@ export declare class CanvasRendererService {
     scaleUp(flow: CanvasFlow, step?: number): void;
     scaleDown(flow: CanvasFlow, step?: number): void;
     setScale(flow: CanvasFlow, scaleValue: number): void;
-    static ɵfac: ɵngcc0.ɵɵFactoryDef<CanvasRendererService, never>;
-    static ɵprov: ɵngcc0.ɵɵInjectableDef<CanvasRendererService>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CanvasRendererService, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<CanvasRendererService>;
 }
-
-//# sourceMappingURL=canvas-renderer.service.d.ts.map
