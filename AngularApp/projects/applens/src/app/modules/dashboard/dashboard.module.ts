@@ -1,9 +1,8 @@
-import { NgModule, Injectable, SecurityContext } from '@angular/core';
+import { NgModule, Injectable, SecurityContext, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DashboardComponent, FormatResourceNamePipe } from './dashboard/dashboard.component';
 import { SharedModule } from '../../shared/shared.module';
-import { ModuleWithProviders } from '@angular/compiler/src/core';
 import { RouterModule, Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AngularSplitModule } from 'angular-split-ng6';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
@@ -44,7 +43,7 @@ import { GistChangelistComponent } from './gist-changelist/gist-changelist.compo
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TabAnalysisComponent } from './tabs/tab-analysis/tab-analysis.component';
 import { CategoryPageComponent } from './category-page/category-page.component';
-import { AvatarModule } from 'ngx-avatar';
+import { AvatarModule } from 'ngx-avatars';
 import { SupportTopicPageComponent } from './support-topic-page/support-topic-page.component';
 import { SelfHelpContentComponent } from './self-help-content/self-help-content.component';
 import { UserDetectorsComponent } from './user-detectors/user-detectors.component';
@@ -124,7 +123,7 @@ export class InitResolver implements Resolve<Observable<ResourceInfo>>{
     }
 }
 
-export const DashboardModuleRoutes: ModuleWithProviders = RouterModule.forChild([
+export const DashboardModuleRoutes: ModuleWithProviders<DashboardModule> = RouterModule.forChild([
     {
         path: '',
         component: DashboardComponent,

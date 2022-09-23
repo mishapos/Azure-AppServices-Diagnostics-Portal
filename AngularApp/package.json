@@ -27,7 +27,7 @@
     "bundle-report": "webpack-bundle-analyzer ../Backend/wwwroot/stats.json -p 8889"
   },
   "dependencies": {
-    "@angular-builders/custom-webpack": "^11.1.1",
+    "@angular-builders/custom-webpack": "^13.1.0",
     "@angular-devkit/build-angular": "^13.3.9",
     "@angular-devkit/core": "^13.3.9",
     "@angular-react/core": "^4.1.0",

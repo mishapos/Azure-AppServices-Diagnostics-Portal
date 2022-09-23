@@ -1,8 +1,7 @@
-import { NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IncidentValidationComponent } from './components/incidentvalidation/incidentvalidation.component';
 import { TemplateManagementComponent } from './components/template-management/template-management.component';
-import { ModuleWithProviders } from '@angular/compiler/src/core';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { FormsModule } from '@angular/forms';
@@ -17,7 +16,7 @@ import { FabDropdownModule } from '@angular-react/fabric/lib/components/dropdown
 import { FabTextFieldModule } from '@angular-react/fabric/lib/components/text-field';
 
 
-export const IncidentAssistModuleRoutes : ModuleWithProviders = RouterModule.forChild([
+export const IncidentAssistModuleRoutes : ModuleWithProviders<IncidentAssistModule> = RouterModule.forChild([
   {
     path: 'manage',
     component: TemplateManagementComponent

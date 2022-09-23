@@ -1,8 +1,7 @@
-import { NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TreeViewComponent } from './components/tree-view/tree-view.component';
 import { DiagnosticApiService } from './services/diagnostic-api.service';
-import { ModuleWithProviders } from '@angular/compiler/src/core';
 import { HttpClientModule } from '@angular/common/http';
 import { SiteService } from './services/site.service';
 import { ContainerAppService } from "./services/containerapp.service";
@@ -53,7 +52,7 @@ import { FabChoiceGroupModule } from '@angular-react/fabric/lib/components/choic
   exports: [TreeViewComponent, ApplensBannerComponent, L1SideNavComponent, ApplensHeaderComponent]
 })
 export class SharedModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<SharedModule> {
     return {
       ngModule: SharedModule,
       providers: [
