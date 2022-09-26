@@ -32,12 +32,12 @@
               </div>
             </div>
             <div class="form-group go-form">
-              <fab-primary-button id="test-template-button" contentStyle="margin-top: 20px; margin-left: 10px;"
+              <fab-primary-button id="test-template-button" [contentStyle]="'margin-top: 20px; margin-left: 10px;'"
                   type="Submit" text='Test Template' (click)="onTestClick()" [disabled]="testButtonDisabled">
               </fab-primary-button>
             </div>
             <div class="form-group go-form">
-              <fab-primary-button id="update-template-button" contentStyle="margin-top: 20px; margin-left: 10px;"
+              <fab-primary-button id="update-template-button" [contentStyle]="'margin-top: 20px; margin-left: 10px;'"
                   type="Submit" text='Update Template' (click)="onUpdateClick()" [disabled]="updateButtonDisabled">
               </fab-primary-button>
             </div>
@@ -80,7 +80,7 @@
               </div>
             </div>
             <div class="section">
-              <fab-primary-button id="test-incident-template-button" contentStyle="margin-top: 20px; margin-left: 10px;"
+              <fab-primary-button id="test-incident-template-button" [contentStyle]="'margin-top: 20px; margin-left: 10px;'"
                   type="Submit" text='Test Incident' (click)="onTestIncidentClick()" [disabled]="!(testIncidentId && testIncidentId.length>6 && testIncidentId.length<15)">
               </fab-primary-button>
             </div>

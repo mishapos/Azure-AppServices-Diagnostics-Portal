@@ -39,7 +39,7 @@
         <fab-choice-group [options]="fabChoiceGroupOptions" [selectedKey]="selectedKey"></fab-choice-group>
       </div>
       <div style="border-top: 1px solid gray; padding: 16px;">
-        <fab-primary-button (onClick)="selectFabricKey()" aria-label="apply" contentClass="mr-3">Apply
+        <fab-primary-button (onClick)="selectFabricKey()" aria-label="apply" [contentClass]="'mr-3'">Apply
         </fab-primary-button>
         <fab-default-button (onClick)="showDowntimeCallout=false;" aria-label="cancel">Cancel</fab-default-button>
       </div>
@@ -117,7 +117,7 @@
         role="text"><strong>Downtime</strong></label>
       <fab-dropdown id="downtimeFilter" role="combobox" [options]="fabOptions" (onChange)="selectFabricKey($event)"
         [defaultSelectedKey]="selectedKey" [disabled]="downtimeFilterDisabled"
-        contentStyle="margin-top: -5px; margin-left: 5px;width:{{fabDropdownWidth}}px;min-width:336px">
+        [contentStyle]="'margin-top: -5px; margin-left: 5px;width:{{fabDropdownWidth}}px;min-width:336px'">
       </fab-dropdown>
     </div>
     <div *ngIf="downtimeSelectionErrorStr!=''" class="errorMessage"
