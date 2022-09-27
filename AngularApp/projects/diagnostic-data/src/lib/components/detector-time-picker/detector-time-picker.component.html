@@ -2,7 +2,7 @@
   <!-- <div class="time-picker-container" *ngIf="globals.openTimePicker" (keydown.escape)="escapeHandler($event)" (keydown.Tab)="tabHandler($event)"> -->
   <fab-callout [hidden]="!openTimePickerCallout" [setInitialFocus]="true" [target]="target"
     (onDismiss)="cancelTimeRange()" [isBeakVisible]="false">
-    <div style="width: 320px;">
+    <div  *ngIf="openTimePickerCallout" style="width: 320px;">
       <div class="callout-padding">
         <fab-choice-group [options]="choiceGroupOptions" [defaultSelectedKey]="defaultSelectedKey">
         </fab-choice-group>
