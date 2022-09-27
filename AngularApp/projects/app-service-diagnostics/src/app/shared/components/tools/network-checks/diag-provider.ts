@@ -3,9 +3,10 @@ import { Globals } from 'projects/app-service-diagnostics/src/app/globals';
 import { stringify } from 'querystring';
 import { ResponseMessageEnvelope } from '../../../models/responsemessageenvelope';
 import { Site, SiteInfoMetaData } from '../../../models/site';
-import { NetworkTroubleshooterPostAPIBody, Credentials, CredentialReference, ResourceMetadata, NetworkTroubleshooterPostTcpPingBody } from '../../../models/network-troubleshooter/post-request-body'
+import { NetworkTroubleshooterPostAPIBody, Credentials, CredentialReference, ResourceMetadata, NetworkTroubleshooterPostTcpPingBody, WrappedManagementApiBody } from '../../../models/network-troubleshooter/post-request-body'
 import { ArmService } from '../../../services/arm.service';
 import { SiteService } from '../../../services/site.service';
+import { unwrapResolvedMetadata } from '@angular/compiler';
 
 enum ConnectionCheckStatus { success, timeout, hostNotFound, blocked, refused }
 export enum OutboundType { SWIFT, gateway };
@@ -53,6 +54,7 @@ export class DiagProvider {
     public async getVNetIntegrationStatusAsync() {
         var result = { isVnetIntegrated: false, outboundType: <OutboundType>null, outboundSubnets: [], inboundType: <InboundType>null, inboundSubnets: [], siteVnetInfo: null };
         var siteArmId = this._siteInfo["id"];
+
         var siteVnetInfo = await this.getWebAppVnetInfo();
         result.siteVnetInfo = siteVnetInfo;
         if (siteVnetInfo != null) {
@@ -143,6 +145,19 @@ export class DiagProvider {
             return Promise.race([promise, timeoutPromise]);
     }
 
+    public static wrapManagementRequest(body: any): any {
+        // Managment requests need to be wrapped and unwrapped.
+        // The content that we are after should be nested in Properties
+        var managementRequestBody = new WrappedManagementApiBody();
+        managementRequestBody.Properties = body;
+        return managementRequestBody;
+    }
+
+    public static unWrapManagementRequest(response: any): any
+    {
+        return response.Properties;
+    }
+
     public async checkConnectionViaAppSettingAsync(appSetting: string, type: string, entityName?: string, timeoutInSec: number = 30): Promise<any> {
         var requestBody = new NetworkTroubleshooterPostAPIBody();
         requestBody.ProviderType = type;
@@ -154,12 +169,13 @@ export class DiagProvider {
         requestBody.ResourceMetadata = new ResourceMetadata();
         requestBody.ResourceMetadata.EntityName = entityName;
 
-        var response: any = await this.postNetworkTroubleshooterApiAsync("connectivityCheck", requestBody, timeoutInSec);
+        var wrappedBody = DiagProvider.wrapManagementRequest(requestBody);
+        var response: any = await this.postNetworkTroubleshooterApiAsync("connectivityCheck", wrappedBody, timeoutInSec);
         if (response == null || response.statusText == null)
         {
           throw Error("No response received when calling the network troubleshooter endpoint via postNetworkTroubleshooterApiAsync().");
         }
-        return response;
+        return unwrapResolvedMetadata(response);
     }
 
     public getKuduApiAsync(uri: string, instance?: string, timeoutInSec: number = 15, scm = false): Promise<any> {
@@ -271,13 +287,13 @@ export class DiagProvider {
         var requestBody = new NetworkTroubleshooterPostTcpPingBody();
         requestBody.Host = hostname;
         requestBody.Port = port;
-        var response: any = await this.postNetworkTroubleshooterApiAsync("TcppingCheck", requestBody, timeout);
+        var response: any = await this.postNetworkTroubleshooterApiAsync("tcpPingCheck", requestBody, timeout);
         if (response == null)
         {
           throw Error("No response received when calling the Network Troubleshooter for tcpPingNetworkTroubleshooterAsync().");
         }
         else if ( response.connectionStatus == null || response.connectionStatusDetails == null) {
-            throw Error("Invalid response when calling Network Troublershooter TcpPing endpoint. Status or Details null");
+            throw Error("Invalid response when calling Network Troublershooter tcpPing endpoint. Status or Details null");
         }
         else 
         {

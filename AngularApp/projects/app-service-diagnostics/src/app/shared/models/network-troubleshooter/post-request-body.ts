@@ -1,3 +1,7 @@
+export class WrappedManagementApiBody {
+    Properties: any
+}
+
 export class NetworkTroubleshooterPostAPIBody {
     ProviderType: string;
     Credentials: Credentials;
