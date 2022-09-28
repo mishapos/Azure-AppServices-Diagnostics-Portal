@@ -33,7 +33,7 @@
         {{downtimeButtonStr}}
       </span>
     </fab-primary-button>
-    <fab-callout *ngIf="showDowntimeCallout" [setInitialFocus]="true" [target]="'#detector-view-downtime'"
+    <fab-callout [hidden]="!showDowntimeCallout" [setInitialFocus]="true" [target]="'#detector-view-downtime'"
       (onDismiss)="closeDownTimeCallOut()">
       <div style="max-width: 300px; overflow-y: auto; padding: 16px;">
         <fab-choice-group [options]="fabChoiceGroupOptions" [selectedKey]="selectedKey"></fab-choice-group>
@@ -41,7 +41,7 @@
       <div style="border-top: 1px solid gray; padding: 16px;">
         <fab-primary-button (onClick)="selectFabricKey()" aria-label="apply" [contentClass]="'mr-3'">Apply
         </fab-primary-button>
-        <fab-default-button (onClick)="showDowntimeCallout=false;" aria-label="cancel">Cancel</fab-default-button>
+        <fab-default-button (onClick)="closeDownTimeCallOut()" aria-label="cancel">Cancel</fab-default-button>
       </div>
     </fab-callout>
     <div *ngIf="downtimeSelectionErrorStr!=''" class="errorMessage"
