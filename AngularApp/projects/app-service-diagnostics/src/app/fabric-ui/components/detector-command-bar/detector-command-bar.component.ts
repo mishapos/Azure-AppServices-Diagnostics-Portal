@@ -283,11 +283,20 @@ export class DetectorCommandBarComponent implements AfterViewInit {
       let _severityLevel: SeverityLevel = SeverityLevel.Warning;
       this.telemetryService.logException(loggingError, null, null, _severityLevel);
     }
+
+    this.removeTeachingBubbleFromDom();
   }
 
   showingTeachingBubble(){
     if (this.displayRPDFButton){
       this.showTeachingBubble = true;
+    }
+  }
+
+  removeTeachingBubbleFromDom() {
+    const htmlElement = document.querySelectorAll<HTMLElement>('.ms-Callout.ms-TeachingBubble');
+    if (htmlElement.length > 0) {
+      htmlElement[0].parentElement.remove();
     }
   }
 }
