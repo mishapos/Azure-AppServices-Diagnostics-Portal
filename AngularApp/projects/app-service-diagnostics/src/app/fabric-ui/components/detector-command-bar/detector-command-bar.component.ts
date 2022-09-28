@@ -294,9 +294,9 @@ export class DetectorCommandBarComponent implements AfterViewInit {
   }
 
   removeTeachingBubbleFromDom() {
-    const htmlElement = document.querySelectorAll<HTMLElement>('.ms-Callout.ms-TeachingBubble');
-    if (htmlElement.length > 0) {
-      htmlElement[0].parentElement.remove();
+    const htmlElements = document.querySelectorAll<HTMLElement>('.ms-Callout.ms-TeachingBubble');
+    if (htmlElements.length > 0) {
+      htmlElements[0].parentElement.remove();
     }
   }
 }

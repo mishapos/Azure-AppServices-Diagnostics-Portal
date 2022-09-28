@@ -1,5 +1,5 @@
 <fab-default-button [id]="filterId" (click)="toggleCallout()" [styles]="buttonStyle" [ariaLabel]="displayName">{{displayName}}</fab-default-button>
-<fab-callout  *ngIf="isCallOutVisible" (onDismiss)="closeCallout()" [setInitialFocus]="true" [target]="filterSelector">
+<fab-callout  [hidden]="!isCallOutVisible" (onDismiss)="closeCallout()" [setInitialFocus]="true" [target]="filterSelector">
   <div class="filter-callout-container callout-padding" (keyup.escape)="closeCallout()">
     <ng-container *ngIf="filterOption === TableFilterSelectionOption.Multiple else singleSelection">
       <fab-checkbox [label]="'All'" [ariaLabel]="'All'" [checked]="getSelectedAllStatus()"
