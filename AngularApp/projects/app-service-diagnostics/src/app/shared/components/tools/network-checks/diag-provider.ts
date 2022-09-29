@@ -2,11 +2,11 @@ import { TelemetryService } from 'diagnostic-data';
 import { Globals } from 'projects/app-service-diagnostics/src/app/globals';
 import { stringify } from 'querystring';
 import { ResponseMessageEnvelope } from '../../../models/responsemessageenvelope';
-import { Site, SiteInfoMetaData } from '../../../models/site';
 import { NetworkTroubleshooterPostAPIBody, Credentials, CredentialReference, ResourceMetadata, NetworkTroubleshooterPostTcpPingBody, WrappedManagementApiBody } from '../../../models/network-troubleshooter/post-request-body'
+import { Site, SiteInfoMetaData } from '../../../models/site';
 import { ArmService } from '../../../services/arm.service';
 import { SiteService } from '../../../services/site.service';
-import { unwrapResolvedMetadata } from '@angular/compiler';
+
 
 enum ConnectionCheckStatus { success, timeout, hostNotFound, blocked, refused }
 export enum OutboundType { SWIFT, gateway };
@@ -129,9 +129,7 @@ export class DiagProvider {
 
     public async postNetworkTroubleshooterApiAsync(api: string, body: any, timeoutInSec: number = 15): Promise<any> {
         var params = "api-version=2015-08-01";
-        //TODO: Temporary switch to calling SCM - revert to calling ARM once ARM manifest is updated
-        var prefix = `management.azure.com/${this._siteInfo.resourceUri}`;
-        //var prefix = `${this.scmHostName}/NetworkValidationChecker`;
+        var prefix = `management.azure.com/${this._siteInfo.resourceUri}/NetworkValidationChecker`;
         var stack = new Error("error_message_placeholder").stack;
         var promise = this._armService.post(`https://${prefix}/${api}?${params}`, body)
             .toPromise()
