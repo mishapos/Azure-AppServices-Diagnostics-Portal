@@ -175,7 +175,7 @@ export class DiagProvider {
         {
           throw Error("No response received when calling the network troubleshooter endpoint via postNetworkTroubleshooterApiAsync().");
         }
-        return unwrapResolvedMetadata(response);
+        return DiagProvider.unWrapManagementRequest(response);
     }
 
     public getKuduApiAsync(uri: string, instance?: string, timeoutInSec: number = 15, scm = false): Promise<any> {
@@ -287,7 +287,9 @@ export class DiagProvider {
         var requestBody = new NetworkTroubleshooterPostTcpPingBody();
         requestBody.Host = hostname;
         requestBody.Port = port;
-        var response: any = await this.postNetworkTroubleshooterApiAsync("tcpPingCheck", requestBody, timeout);
+        var wrappedBody = DiagProvider.wrapManagementRequest(requestBody);
+        var wrappedResponse: any = await this.postNetworkTroubleshooterApiAsync("tcpPingCheck", wrappedBody, timeout);
+        var response = DiagProvider.unWrapManagementRequest(wrappedResponse)
         if (response == null)
         {
           throw Error("No response received when calling the Network Troubleshooter for tcpPingNetworkTroubleshooterAsync().");
