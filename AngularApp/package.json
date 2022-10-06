@@ -23,7 +23,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "lib": "npm run fixAngularReact && ng build diagnostic-data --watch",
-    "generate-report": "npm install webpack-bundle-analyzer -g  && ng build app-service-diagnostics --configuration production --stats-json",
+    "generate-report": "npm install --save-dev webpack-bundle-analyzer && ng build app-service-diagnostics --configuration production --stats-json",
     "bundle-report": "webpack-bundle-analyzer ../Backend/wwwroot/stats.json -p 8889"
   },
   "dependencies": {
@@ -116,7 +116,7 @@
     "selfsigned": "^1.10.2",
     "ts-node": "~4.1.0",
     "typescript": "~4.6.4",
-    "webpack-bundle-analyzer": "^3.6.0"
+    "webpack-bundle-analyzer": "^3.9.0"
   },
   "browser": {
     "fs": false,
